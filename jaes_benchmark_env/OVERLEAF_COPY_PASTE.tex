@@ -1,0 +1,377 @@
+\documentclass[fleqn,draft]{jaes}
+
+% Metadata Information
+\jyear{2026}
+\jmonth{November}
+\jvol{72}
+\jnum{11}
+
+\usepackage{amsmath}\setlength{\mathindent}{19pt}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage[capitalize]{cleveref}
+
+\begin{document}
+
+% Title portion (Max 125 characters, no 'new' or 'novel')
+\title{Real-Time Modified Nodal Analysis for Interactive Audio: Feasibility, Continuity, and Storage Trade-Offs}
+
+% Page heads (Authors) [Short title]
+\markboth{ARJUNAN}{REAL-TIME MNA FOR INTERACTIVE AUDIO}
+
+% Author Information
+\author[1]{BOOBALAN ARJUNAN, \AESmember}
+\affil[1]{ComposerMind Labs LLP, \email{research@composermind.com}}
+
+\maketitle
+
+\begin{abstract}
+Interactive spatial audio engines require deterministic sub-buffer execution deadlines, minimal memory footprints, and responsive modulation under continuous parameter sweeps. Conventional multi-sample playback demands substantial storage for multi-zone parameter coverage and can introduce phase cancellation during crossfading. This paper evaluates discrete-time Modified Nodal Analysis (MNA) with iterative Newton--Raphson non-linear solving in Web Audio \texttt{AudioWorkletProcessor} architectures. High-resolution profiling on an ARM64 Apple M1 Max host demonstrated that steady-state 4-voice MNA consumes an average of 10.31\% to 22.98\% (612.7~$\mu$s) of the 2,666.67~$\mu$s block deadline across an 18,000-block factorial benchmark, with zero deadline violations (peak transient duration: 1,704.7~$\mu$s, 36.07\% headroom). In a dedicated 20-trial evaluation, preallocated cold-start blocks completed within 873.4~$\mu$s. Under a 60~Hz parameter sweep across 20 trials, in-place reactive state preservation produced significantly fewer first-derivative outlier spikes than a matched 3-zone sample-crossfade baseline ($t = -6.64, p = 2.37 \times 10^{-6}$). The verified 61-preset netlist library occupies 81,130 bytes, representing a $12,992\times$ to $76,223\times$ storage reduction compared to modeled uncompressed PCM sample banks (1.05 to 6.18~GB) and $860\times$ to $1,170\times$ versus lossy compressed audio (70 to 95~MB), balanced against an $8\times$ higher computational cost.
+\end{abstract}
+
+\keywords{Modified Nodal Analysis, Virtual Analog Synthesis, Physical Modeling, AudioWorklet, Newton--Raphson, Parameter Continuity, Procedural Audio, Audio for Extended Reality}
+
+\section{1 INTRODUCTION}
+
+Interactive spatial computing, gaming, and Extended Reality (XR) require audio engines that respond dynamically to continuous user input (e.g., 60~Hz or 120~Hz hand-tracking gestures, 6-DOF head motion, and controller manipulation). In these applications, synthesis engines must operate within deterministic real-time audio thread deadlines---conventionally 128 samples per block at 48~kHz (2.67~ms)---while sharing memory and processing resources with concurrent tracking, computer vision, and rendering tasks.
+
+The predominant architecture for interactive sound generation is \textbf{multi-sample playback}. Sample playback is computationally lightweight, requiring only table lookups, fractional delay interpolation, and gain scaling. However, scaling sample playback to support multi-dimensional, continuous parametric interaction (such as sweeping a circuit's drive, resistance, or resonance) presents two primary challenges:
+\begin{enumerate}
+\item \textit{Asset Storage and Memory Pressure:} Capturing non-linear parametric variations requires dense grids of multi-samples across pitch, velocity, and control axes. On resource-constrained embedded systems, storing and streaming multi-gigabyte sample libraries strains disk storage and unified memory architectures.
+\item \textit{Crossfading Artifacts:} When transitioning between discrete parameter zones under continuous control, sample engines typically employ equal-power crossfading. Because independently recorded audio samples have uncorrelated phase trajectories, crossfading can cause phase cancellation, comb filtering, and timbral stepping unless extensive control-rate low-pass smoothing is applied \cite{serafin2016virtual, turchet2021smart}.
+\end{enumerate}
+
+\textbf{Procedural physical modeling}, and specifically discrete-time circuit simulation via Modified Nodal Analysis (MNA), synthesizes waveforms directly from mathematical descriptions of electrical circuits. By updating component conductances in-place while preserving the internal energy states of reactive components (capacitors and inductors), physical models can inherently generate smooth timbral transitions without requiring pre-recorded audio assets. Historically, however, the audio engineering community has viewed non-linear MNA solvers---which require iterative matrix solutions at every audio sample---as computationally prohibitive for real-time consumer deployment, particularly within web-based or mobile runtime environments.
+
+This paper investigates the trade-offs of real-time circuit-based synthesis, focusing on the following central research question:
+\begin{quote}
+\textit{Can state-preserving, circuit-based procedural synthesis support rapid interactive parameter changes while offering a practical compute--storage trade-off against multi-sample playback?}
+\end{quote}
+
+We evaluate the discrete-time MNA engine implemented in NodalSynth Pro, designed for execution in the Web Audio \texttt{AudioWorkletProcessor} environment. Host measurements were conducted on an Apple M1 Max host using headless V8 microsecond timing, accompanied by browser-level execution verification in Chromium. We measure block-by-block processing execution times, quantify parameter continuity under a 60~Hz control sweep against a matched multi-zone sample-crossfade baseline, audit the exact binary netlist storage, and project modeled storage requirements for equivalent multi-sample representations.
+
+\section{2 RELATED WORK}
+
+\subsection{2.1 Virtual Analog Circuit Modeling and MNA}
+Virtual analog (VA) modeling aims to digitize acoustic and electronic instruments by discretizing physical circuit equations. Foundational techniques encompass Wave Digital Filters (WDF), state-space formulations, and Modified Nodal Analysis (MNA). While WDFs \cite{fettweis1986wave, smith2010physical} decouple reciprocal circuit elements through wave variables, they can become complex when handling arbitrary multi-port non-linear topologies. State-space approaches \cite{bilbao2009numerical, valimaki2006discrete} provide compact mathematical representations but require explicit derivation of state-variable differential equations.
+
+Modified Nodal Analysis, originally formulated by Ho, Ruehli, and Brennan \cite{ho1975modified}, provides a systematic method for generating circuit equations directly from schematic netlists using Kirchhoff's Current Law (KCL) and branch equations. Yeh, Abel, and Smith \cite{yeh2007automated, yeh2009automated} demonstrated the viability of automated MNA solvers for non-linear audio circuits, including guitar distortion stages, showing that Newton--Raphson iteration can solve transcendental diode equations in discrete time. Further advances by Holters and Z\"olzer \cite{holters2011physical, holters2015combined} explored parameterized multi-port models and iterative solvers for vacuum-tube amplifiers. While these prior studies established the theoretical foundation of circuit simulation for audio effects, their implementations were predominantly designed for offline simulation or compiled C/C++ audio plugins running on desktop workstation CPUs.
+
+\subsection{2.2 Web Audio and AudioWorklet Architectures}
+The evolution of the W3C Web Audio API \cite{w3c2021webaudio, adenot2015webaudio} from early script processor nodes to the \texttt{AudioWorklet} architecture \cite{choi2018audioworklet} enabled custom, low-latency DSP execution directly on a dedicated real-time audio rendering thread. Choi \cite{choi2018highperformance} demonstrated that modern Just-In-Time (JIT) JavaScript engines (such as V8) can achieve predictable real-time DSP performance in browser environments, provided memory allocations inside the audio callback are avoided to prevent garbage collection (GC) pauses. Recent work has explored running physical models and compiled WebAssembly (Wasm) modules in \texttt{AudioWorklet} \cite{buffa2019webaudio}, but systematic evaluations of polyphonic non-linear MNA solvers under strict audio block deadlines remain limited in the literature.
+
+\subsection{2.3 Procedural Audio and Extended Reality (XR) Constraints}
+Procedural audio generates sound dynamically through computational models rather than replaying static recordings \cite{farnell2010designing}. In virtual reality (VR) and extended reality (XR), procedural sound offers advantages for interactive objects, physical collisions, and continuous spatial interaction \cite{serafin2016virtual, turchet2021smart}. Serafin et al. \cite{serafin2016virtual} emphasized that VR musical instruments and interactive sound objects demand continuous physical responsiveness without discrete velocity or layer stepping. In mobile and standalone XR platforms, audio rendering must share strict CPU, thermal, and memory budgets with head tracking, spatial mapping, and graphics rendering \cite{poletti2016spatial, armstrong2020audio}. While spatialization pipelines (e.g., binaural HRTF convolution and room acoustics simulation) have been widely investigated \cite{poletti2016spatial, ziegelwanger2015numerical}, the compute--storage trade-offs of the underlying source sound generators under real-time interactive constraints warrant empirical evaluation.
+
+\section{3 MATHEMATICAL FORMULATION OF THE MNA SOLVER}
+
+\subsection{3.1 Modified Nodal Analysis (MNA) Formulation}
+Following the standard MNA formulation \cite{ho1975modified, yeh2007automated}, an electrical network containing $N$ ungrounded nodes and $K$ independent voltage sources is described by:
+\begin{equation}
+\mathbf{A} \mathbf{x}(t) = \mathbf{z}(t)
+\end{equation}
+where $\mathbf{x}(t) = [v_1, \dots, v_N, i_{E1}, \dots, i_{EK}]^T$ is the vector of unknown node voltages and voltage-source branch currents. The system matrix $\mathbf{A} \in \mathbb{R}^{M \times M}$ ($M = N + K$) is partitioned into:
+\begin{equation}
+\begin{bmatrix} \mathbf{G} & \mathbf{B} \\ \mathbf{C} & \mathbf{D} \end{bmatrix} \begin{bmatrix} \mathbf{v}(t) \\ \mathbf{i}_E(t) \end{bmatrix} = \begin{bmatrix} \mathbf{j}(t) \\ \mathbf{e}(t) \end{bmatrix}
+\end{equation}
+where $\mathbf{G}$ represents static node conductances, $\mathbf{B}$ and $\mathbf{C}$ describe voltage-source incidence ($\mathbf{C} = \mathbf{B}^T$ for reciprocal networks), $\mathbf{D}$ is zero for ideal independent sources, and the right-hand vector $\mathbf{z}(t) = [\mathbf{j}(t), \mathbf{e}(t)]^T$ incorporates source excitations and reactive companion currents.
+
+\subsection{3.2 Discrete-Time Companion Models}
+Linear reactive elements (capacitors and inductors) are discretized at sample period $T = 1 / f_s$ using the bilinear transform (Trapezoidal integration rule).
+
+\subsubsection{3.2.1 Capacitor Companion Model}
+The continuous-time constitutive relation $i_C(t) = C \frac{dv}{dt}$ discretized via the trapezoidal rule yields:
+\begin{equation}
+v(n) - v(n-1) = \frac{T}{2C} \left[ i_C(n) + i_C(n-1) \right]
+\end{equation}
+Rearranging into the Norton equivalent companion form implemented in the engine:
+\begin{equation}
+i_C(n) = G_{\text{eq}, C} \left( v(n) - v(n-1) \right) - i_C(n-1)
+\end{equation}
+where the equivalent conductance is:
+\begin{equation}
+G_{\text{eq}, C} = \frac{2C}{T}
+\end{equation}
+In the solver's state layout, the voltage difference $v(n-1)$ is tracked in state vector $\mathbf{S}_1$ and previous branch current $i_C(n-1)$ in state vector $\mathbf{S}_2$. During the right-hand side assembly, the Norton equivalent history current injected into the system is:
+\begin{equation}
+I_{\text{eq}, C}(n-1) = G_{\text{eq}, C} \, v(n-1) + i_C(n-1)
+\end{equation}
+Upon solver convergence, the states are updated in-place:
+\begin{equation}
+i_C(n) = G_{\text{eq}, C} \left( v(n) - S_1(n-1) \right) - S_2(n-1)
+\end{equation}
+\begin{equation}
+S_1(n) = v(n), \quad S_2(n) = i_C(n)
+\end{equation}
+
+\subsubsection{3.2.2 Inductor Companion Model}
+For an inductor with constitutive relation $v_L(t) = L \frac{di}{dt}$, trapezoidal integration yields:
+\begin{equation}
+i_L(n) = i_L(n-1) + G_{\text{eq}, L} \left( v(n) + v(n-1) \right)
+\end{equation}
+where the equivalent conductance is:
+\begin{equation}
+G_{\text{eq}, L} = \frac{T}{2L}
+\end{equation}
+The Norton companion current injected during matrix loading is:
+\begin{equation}
+I_{\text{eq}, L}(n-1) = -(i_L(n-1) + G_{\text{eq}, L} \, v(n-1))
+\end{equation}
+Upon convergence, inductor states are updated:
+\begin{equation}
+i_L(n) = S_2(n-1) + G_{\text{eq}, L} \left( v(n) + S_1(n-1) \right)
+\end{equation}
+\begin{equation}
+S_1(n) = v(n), \quad S_2(n) = i_L(n)
+\end{equation}
+
+\subsection{3.3 Non-linear Elements and Newton--Raphson Iteration}
+Nonlinear semiconductor components (e.g., diodes) introduce voltage-dependent branch currents:
+\begin{equation}
+i_D(v_D) = I_s \left( \exp\left(\frac{v_D}{\eta V_T}\right) - 1 \right)
+\end{equation}
+where $I_s$ is reverse saturation current, $\eta$ is ideality factor, and $V_T = \frac{k_B T_{\text{temp}}}{q}$ is thermal voltage ($\approx 25.85\text{ mV}$ at 300~K).
+
+At each discrete time step, the non-linear algebraic system $\mathbf{F}(\mathbf{x}) = \mathbf{A}\mathbf{x} + \mathbf{i}_{\text{nl}}(\mathbf{x}) - \mathbf{z} = \mathbf{0}$ is solved iteratively via Newton--Raphson:
+\begin{equation}
+\mathbf{J}(\mathbf{x}^{(k)}) \, \Delta \mathbf{x}^{(k)} = -\mathbf{F}(\mathbf{x}^{(k)})
+\end{equation}
+\begin{equation}
+\mathbf{x}^{(k+1)} = \mathbf{x}^{(k)} + \Delta \mathbf{x}^{(k)}
+\end{equation}
+where the dynamic Jacobian conductance for each diode branch is:
+\begin{equation}
+g_d^{(k)} = \left. \frac{di_D}{dv_D} \right|_{v_D^{(k)}} = \frac{I_s}{\eta V_T} \exp\left(\frac{v_D^{(k)}}{\eta V_T}\right)
+\end{equation}
+Convergence is evaluated under an infinity-norm threshold $\|\Delta \mathbf{x}\|_\infty < 10^{-6}\text{ V}$ with a hard limit of $K_{\text{max}} = 20$ iterations per sample to enforce deterministic execution time bounds.
+
+\subsection{3.4 Oversampling and Anti-Aliasing Filtering}
+To suppress non-linear harmonic aliasing, the MNA solver executes at $2\times$ oversampling ($f_{\text{internal}} = 96\text{ kHz}$ for $f_s = 48\text{ kHz}$). The oversampled signal is decimated to 48~kHz using a 23-tap Blackman-windowed half-band FIR low-pass filter:
+\begin{equation}
+h[k] = w[k] \cdot \frac{\sin(\pi k / 2)}{\pi k}, \quad k \in [-11, 11]
+\end{equation}
+where $w[k] = 0.42 - 0.5 \cos\left(\frac{2\pi(k+11)}{22}\right) + 0.08 \cos\left(\frac{4\pi(k+11)}{22}\right)$. The half-band structure ensures that every alternate coefficient is identically zero ($h[2m] = 0$ for $m \neq 0$), halving the multiplication overhead during real-time decimation.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figure1_pipeline.pdf}
+\caption{Discrete-time MNA AudioWorklet rendering pipeline with $2\times$ oversampling and in-place state vector ($\mathbf{S}_1, \mathbf{S}_2$) retention.}
+\label{fig:pipeline}
+\end{figure}
+
+\section{4 EMPIRICAL BENCHMARK METHODOLOGY \& SETUP}
+
+\subsection{4.1 Host Hardware and Audio Execution Constraints}
+Empirical microsecond timing benchmarks were conducted on an \textbf{Apple M1 Max} host system (10 CPU cores: 8 performance cores, 2 efficiency cores; 32~GB unified LPDDR5 memory; macOS Darwin kernel; ARM64 architecture).
+\begin{itemize}
+\item \textit{Headless V8 Profiling:} To eliminate browser timer quantization (where Spectre/Meltdown security mitigations round \texttt{performance.now()} to 5--20~$\mu$s intervals), quantitative latency distributions were measured using \texttt{process.hrtime.bigint()} in a headless Node.js v24.5.0 environment executing the identical V8 JIT compilation pipeline.
+\item \textit{Browser AudioWorklet Verification:} In parallel, browser execution was verified in Chromium 157 using an interactive harness (\texttt{benchmark.html}) executing within an active \texttt{AudioWorkletProcessor} thread. This confirmed engine instantiation, thread-safety, and matching median block processing loads within timer quantization limits.
+\end{itemize}
+
+The audio rendering deadline was configured to match standard interactive audio requirements:
+\begin{itemize}
+\item Native audio sample rate: $f_s = 48,000\text{ Hz}$
+\item Audio buffer block size: $N_{\text{block}} = 128\text{ samples}$
+\item Audio block deadline budget:
+\begin{equation}
+T_{\text{budget}} = \frac{128}{48,000}\text{ s} \approx 2.66667\text{ ms} \quad (2,666.67\,\mu\text{s})
+\end{equation}
+\end{itemize}
+Output buffers (\texttt{Float32Array}) and solver scratch structures were preallocated prior to test execution, and output buffers were explicitly cleared at every block boundary (\texttt{outL.fill(0)}, \texttt{outR.fill(0)}).
+
+\subsection{4.2 Benchmark Circuits}
+Three circuit configurations were selected to span the complexity spectrum:
+\begin{enumerate}
+\item \textbf{RC High-Pass Filter (Linear):} 2 nodes, 1 capacitor ($10\text{ nF}$), 1 resistor ($10\text{ k}\Omega$). Solved directly via linear matrix solution without Newton--Raphson iteration.
+\item \textbf{Half-Wave Rectifier (Weakly Non-linear):} 3 nodes, 1 signal diode (1N4148 model), 1 resistor, 1 capacitor. Requires iterative non-linear solving during forward conduction cycles.
+\item \textbf{Fuzz Distortion Stage (Strongly Non-linear):} 5 nodes, anti-parallel clipping diode pair, reactive capacitors, variable drive resistance ($940\,\Omega \le R \le 23.5\text{ k}\Omega$). Exercises frequent Jacobian updates and Newton--Raphson iterations per step.
+\end{enumerate}
+
+\subsection{4.3 Matched Multi-Zone Sample-Crossfade Baseline}
+To establish a realistic point of comparison, the MNA solver was benchmarked against an industry-standard \textbf{3-Zone Parameter-Smoothed Sample-Crossfade Engine}:
+\begin{itemize}
+\item \textit{Reference Audio:} 24-bit/48~kHz reference audio rendered directly from the identical MNA circuit at three anchor parameter states: Zone 1 ($R = 940\,\Omega$), Zone 2 ($R = 11,750\,\Omega$), and Zone 3 ($R = 23,500\,\Omega$). The 24-bit depth was chosen specifically to maximize dynamic range and eliminate quantization noise in the reference material.
+\item \textit{Crossfade Curve:} Equal-power piecewise crossfading across adjacent zones.
+\item \textit{Control Smoothing:} A continuous single-pole low-pass filter with a cutoff frequency of $f_c = 30\text{ Hz}$ applied to incoming parameter transitions:
+\begin{equation}
+R_{\text{smoothed}}(n) = R_{\text{smoothed}}(n-1) + \alpha \left( R_{\text{target}}(n) - R_{\text{smoothed}}(n-1) \right)
+\end{equation}
+where $\alpha = 1 - \exp\left(-\frac{2\pi f_c}{f_s}\right) \approx 0.00392$.
+\item \textit{Interpolation:} Cubic-Hermite polynomial interpolation.
+\end{itemize}
+
+\section{5 MEASURED EXPERIMENTAL RESULTS}
+
+\subsection{5.1 Steady-State Compute Times and Polyphony Scaling}
+Table~\ref{tab:steady_state} reports the compute duration per 128-sample block across all 18 evaluated experimental conditions (3 circuit presets $\times$ 3 polyphony levels $\times$ 2 engines = 18 runs, with 1,000 blocks per run, yielding 18,000 measured blocks in total) on the Apple M1 Max host.
+
+\begin{table*}[t]
+\caption{Steady-State Processing Duration per 128-Sample Audio Block on Apple M1 Max Host (18 Runs $\times$ 1,000 Blocks = 18,000 Blocks Total; Audio Deadline Budget = 2,666.67~$\mu$s).}
+\label{tab:steady_state}
+\centering
+\begin{tabular}{llccccccc}
+\toprule
+Circuit Preset & Synthesis Engine & Polyphony & Mean ($\mu$s) & Median ($\mu$s) & P95 ($\mu$s) & Max ($\mu$s) & Budget Used (Mean) & Deadline Violations \\
+\midrule
+RC High-Pass & Live MNA & 1 Voice & 99.6 & 98.3 & 103.6 & 163.8 & 3.73\% & 0 / 1,000 (0.0\%) \\
+RC High-Pass & Live MNA & 2 Voices & 158.7 & 156.3 & 171.7 & 376.8 & 5.95\% & 0 / 1,000 (0.0\%) \\
+RC High-Pass & Live MNA & 4 Voices & 274.9 & 271.3 & 293.7 & 915.5 & 10.31\% & 0 / 1,000 (0.0\%) \\
+RC High-Pass & Matched Baseline & 4 Voices & 55.9 & 54.7 & 57.8 & 284.5 & 2.10\% & 0 / 1,000 (0.0\%) \\
+\midrule
+Half-Wave Rectifier & Live MNA & 1 Voice & 160.5 & 158.0 & 173.8 & 283.3 & 6.02\% & 0 / 1,000 (0.0\%) \\
+Half-Wave Rectifier & Live MNA & 2 Voices & 283.0 & 278.2 & 310.1 & 775.8 & 10.61\% & 0 / 1,000 (0.0\%) \\
+Half-Wave Rectifier & Live MNA & 4 Voices & 530.9 & 525.9 & 576.0 & 704.5 & 19.91\% & 0 / 1,000 (0.0\%) \\
+Half-Wave Rectifier & Matched Baseline & 4 Voices & 55.1 & 54.5 & 57.4 & 147.3 & 2.07\% & 0 / 1,000 (0.0\%) \\
+\midrule
+Fuzz Stage & Live MNA & 1 Voice & 180.8 & 171.2 & 222.6 & 672.3 & 6.78\% & 0 / 1,000 (0.0\%) \\
+Fuzz Stage & Live MNA & 2 Voices & 322.0 & 314.8 & 375.9 & 1,776.6 & 12.08\% & 0 / 1,000 (0.0\%) \\
+Fuzz Stage & Live MNA & 4 Voices & 612.7 & 606.0 & 686.6 & \textbf{1,704.7} & \textbf{22.98\%} & 0 / 1,000 (0.0\%) \\
+Fuzz Stage & Matched Baseline & 4 Voices & 55.2 & 54.6 & 56.9 & 118.9 & 2.07\% & 0 / 1,000 (0.0\%) \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Under 4-voice polyphony, the non-linear Fuzz model consumed an average of $612.7\,\mu\text{s}$ (22.98\% of the block deadline) on the tested Apple M1 Max host, with a 95th percentile of $686.6\,\mu\text{s}$ (25.75\%). Importantly, the maximum observed block duration reached $1,704.7\,\mu\text{s}$ (63.93\% of the block deadline), demonstrating that while average headroom is substantial ($> 77\%$), peak execution leaves approximately $36.07\%$ ($962.0\,\mu\text{s}$) unallocated during transient worst-case solving. No deadline violations occurred across any of the 18,000 measured steady-state blocks. Polyphonic execution scaled linearly ($R^2 = 0.9998$), reflecting independent voice calculations.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figure2_polyphony.pdf}
+\caption{Steady-state block execution duration (mean and worst-case peak) across linear and non-linear circuit presets relative to the $2,666.67\,\mu\text{s}$ audio deadline on an Apple M1 Max host.}
+\label{fig:polyphony}
+\end{figure}
+
+\subsection{5.2 Cold-Start Timing Evaluation}
+Early unbuffered pilot benchmarks reported an isolated $17.7\text{ ms}$ processing spike on initial execution. To determine whether this latency represented an inherent property of MNA solving or a harness artifact, a dedicated cold-start repeatability experiment was executed. 
+
+Twenty independent fresh engine instantiations ($N=20$ trials) were measured for the 4-voice non-linear Fuzz model. Each trial recorded the initial cold block (Block 0) followed by 1,000 warmed steady-state blocks (Blocks 1--1,000), producing 20 cold-start blocks and 20,000 steady-state blocks in total (Table~\ref{tab:cold_start}).
+
+\begin{table}[h]
+\caption{Cold-Start (Block 0) Repeatability Evaluation ($N=20$ Independent Trials, 4-Voice Fuzz).}
+\label{tab:cold_start}
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Regime & Mean ($\mu$s) & P50 ($\mu$s) & Max ($\mu$s) & Violations \\
+\midrule
+Cold Start (Block 0) & 784.5 & 771.4 & \textbf{873.4} & 0 / 20 (0.0\%) \\
+Steady-State (1--1,000) & 612.7 & 606.0 & 1,704.7 & 0 / 20,000 (0.0\%) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The results indicate that the $17.7\text{ ms}$ spike observed in unbuffered pilot scripts occurred in the absence of preallocated buffers. When TypedArray memory is preallocated, initial Block 0 execution completes in a maximum of $873.4\,\mu\text{s}$ (32.75\% of budget) on the host hardware, well within the $2,666.67\,\mu\text{s}$ audio deadline. The exact cause of the original pilot spike remains unisolated, but it is absent under preallocated execution.
+
+\section{6 PARAMETER MODULATION CONTINUITY}
+
+To simulate interactive control input (such as 60~Hz gesture or tracking data), a continuous parameter sweep of the primary resistor ($940\,\Omega \to 23,500\,\Omega$) was executed over a 2.0-second interval across 20 repeated trials ($N = 20, df = 19, \alpha = 0.05$). The 20 trials evaluated a standardized single sweep trajectory with systematic sub-cent pitch detuning ($45.00$ to $45.02$ MIDI) and initial sample playback phase offsets (\texttt{phase = trial * 137}) to introduce micro-acoustic variations. Three metrics were quantified:
+\begin{enumerate}
+\item \textit{Distance to Reference ($L_2$ error):} Mean Euclidean distance relative to a quasi-static physical reference rendered at 100 discrete resistance steps where the circuit was allowed to reach steady state.
+\item \textit{Normalized Spectral Flux ($SF$):} Frame-to-frame magnitude difference across 512-point STFT spectra.
+\item \textit{$4\sigma$ Derivative Outliers:} Count of sample-to-sample first-derivative jumps exceeding four standard deviations ($|y[n] - y[n-1]| > 4\sigma_{\Delta}$).
+\end{enumerate}
+
+Table~\ref{tab:continuity} reports the statistical comparison between Live MNA and the matched 3-zone sample crossfader.
+
+\begin{table}[h]
+\caption{Parameter Modulation Continuity under 60~Hz Resistance Sweep ($N=20$ Trials, $df=19$, $\alpha = 0.05$).}
+\label{tab:continuity}
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Metric & Live MNA & Sample Crossfader & Paired $t$ & $p$-value \\
+\midrule
+Reference $L_2$ & $0.1659 \pm 0.0003$ & $0.1658 \pm 0.0003$ & $1.11$ & $0.2827$ \\
+Spectral Flux & $0.1118 \pm 0.0003$ & $0.1114 \pm 0.0004$ & $3.67$ & $0.0016$ \\
+$4\sigma$ Outliers & $\mathbf{483.30 \pm 0.47}$ & $503.65 \pm 13.97$ & $\mathbf{-6.64}$ & $\mathbf{2.37 \times 10^{-6}}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+MNA produced significantly fewer first-derivative outlier spikes than the sample crossfader ($t = -6.64, p = 2.37 \times 10^{-6}$). In NodalSynth Pro, component updates invoke \texttt{wt.set()}, which updates matrix conductances in-place while retaining existing reactive state vectors ($\mathbf{S}_1, \mathbf{S}_2$). While the preservation of capacitor voltages and inductor currents is established directly by the mathematical solver equations and memory layout, the statistically significant reduction in derivative outliers demonstrates that MNA produces smoother sample-to-sample transitions than the crossfade baseline under the tested sweep. However, this objective metric alone does not establish perceptual superiority; formal psychoacoustic listening tests (e.g., MUSHRA or ABX) would be required to evaluate perceptual audibility.
+
+\section{7 STORAGE FOOTPRINT AND ASSET SCALING}
+
+\subsection{7.1 Physical Netlist Asset Footprint}
+NodalSynth Pro stores synthesizer configurations as discrete netlists encoded in custom binary structures. The persistent asset size of all 61 built-in presets was audited:
+\begin{itemize}
+\item Total netlist collection size: \textbf{81,130 bytes} (79.23~KiB)
+\item Average storage per circuit preset: \textbf{1,330.0 bytes} ($\approx 1.30\text{ KiB}$)
+\end{itemize}
+
+\subsection{7.2 Modeled Multi-Sample Scenarios}
+To assess the storage trade-off against sample-based representations providing comparable parameter coverage, we modeled theoretical uncompressed 16-bit stereo PCM audio requirements ($f_s = 48\text{ kHz}$, 2.0-second sustained notes $= 384,000\text{ bytes} \approx 375\text{ KiB}$ per sample). Three sample coverage tiers were modeled across all 61 presets (Table~\ref{tab:storage}):
+\begin{itemize}
+\item \textit{Minimal Coverage (15 notes $\times$ 3 zones):} 2,745 WAV files requiring 1,054.08~MB (1.054~GB), representing a \textbf{$12,992.5\times$} difference relative to netlists.
+\item \textit{Standard Coverage (24 notes $\times$ 3 zones):} 4,392 WAV files requiring 1,686.53~MB (1.687~GB), representing a \textbf{$20,788.1\times$} difference.
+\item \textit{Full Chromatic Coverage (88 notes $\times$ 3 zones):} 16,104 WAV files requiring 6,183.94~MB (6.184~GB), representing a \textbf{$76,222.6\times$} difference.
+\end{itemize}
+
+\begin{table*}[t]
+\caption{Storage Comparison: Verified MNA Netlists vs. Modeled Uncompressed PCM Sample-Bank Scenarios (All 61 Presets).}
+\label{tab:storage}
+\centering
+\begin{tabular}{lcccc}
+\toprule
+Architecture Tier & Total Asset Files & Total Storage (MB / GB) & Storage / Preset & Storage Ratio vs. Netlists \\
+\midrule
+\textbf{NodalSynth Pro Physical Netlists} & \textbf{61 Presets} & \textbf{0.077 MB (81,130 bytes)} & \textbf{1,330.0 bytes} & \textbf{1.0$\times$ (Reference)} \\
+Modeled Minimal Coverage ($15 \times 3$) & 2,745 WAVs & 1,054.08 MB (1.054 GB) & 17.28 MB & \textbf{12,992.5$\times$ larger} \\
+Modeled Standard Coverage ($24 \times 3$) & 4,392 WAVs & 1,686.53 MB (1.687 GB) & 27.65 MB & \textbf{20,788.1$\times$ larger} \\
+Modeled Full Chromatic ($88 \times 3$) & 16,104 WAVs & 6,183.94 MB (6.184 GB) & 101.38 MB & \textbf{76,222.6$\times$ larger} \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{7.3 Lossy Audio Compression Comparison}
+In commercial applications, lossy audio compression codecs (e.g., Opus or AAC at 96--128~kbps) significantly reduce storage footprint. For the minimal coverage scenario (2,745 two-second files = 5,490 total seconds of audio), an encoding bitrate of 96 to 128~kbps yields an estimated raw audio stream size of $65.9\text{ to }87.8\text{ MB}$ (approximately $70\text{ to }95\text{ MB}$ when accounting for container headers and seek tables). While substantially more compact than uncompressed PCM, this compressed footprint remains approximately \textbf{$860\times$ to $1,170\times$} larger than the $81.1\text{ KB}$ netlist collection, and necessitates either background stream decompression buffering or runtime decoding overhead.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figure3_storage.pdf}
+\caption{Logarithmic asset storage footprint comparison: verified 61 physical netlists vs. lossy compressed audio (Opus/AAC) and uncompressed PCM sample-bank coverage scenarios.}
+\label{fig:storage}
+\end{figure}
+
+\section{8 LIMITATIONS AND FUTURE WORK}
+
+Several limitations of this study should be recognized:
+\begin{enumerate}
+\item \textit{Host Hardware Scope:} Empirical measurements were conducted exclusively on an Apple M1 Max host processor. While the M1 Max shares the ARM64 instruction set with mobile XR chipsets (such as Qualcomm Snapdragon XR2 series), variations in CPU core microarchitectures, thermal throttling limits, L1/L2 cache capacities, and operating system scheduling policies mean that host measurements cannot be generalized directly to standalone XR headsets without on-device empirical testing.
+\item \textit{Fixed Circuit Topologies:} The engine evaluates pre-configured circuit topologies. Dynamic runtime topology modification (e.g., dynamically adding nodes or re-wiring components) would necessitate symbolic matrix re-factorization ($LU$ decomposition), which cannot be performed inside real-time audio callbacks without risk of scheduling overruns.
+\item \textit{Polyphony Limits and Peak Latency:} While 4-voice polyphony executed comfortably within the host deadline on average ($< 23\%$ of budget), peak observed latency reached $63.93\%$ of the deadline. Scaling to high-voice scenarios (16+ voices) on lower-powered mobile hardware would challenge single-threaded audio execution, requiring multi-threaded work-stealing or SIMD vectorization.
+\item \textit{Absence of Subjective Listening Tests:} The continuity evaluation in this paper relies on objective metrics (spectral flux, derivative outliers). Perceptual audibility of transitions under diverse interaction profiles should be evaluated in future work using formal MUSHRA or ABX listening tests.
+\end{enumerate}
+
+Future research will focus on porting the MNA solver to WebAssembly (Wasm) with SIMD vector extensions, benchmarking directly on physical standalone XR devices (Meta Quest 3 and Apple Vision Pro), and coupling MNA source synthesis with interactive acoustic finite-difference time-domain (FDTD) room simulation.
+
+\section{9 USE OF ARTIFICIAL INTELLIGENCE AND LARGE LANGUAGE MODELS}
+
+During the preparation of this manuscript, the author utilized large language model assistants (Claude 3.7 Sonnet by Anthropic and ChatGPT by OpenAI, November 2026) for technical drafting, code formatting, literature citation aggregation, and LaTeX document preparation. Following initial AI-assisted drafting, the author independently verified, revised, and validated all mathematical formulations, benchmark execution scripts, empirical dataset calculations, and bibliographic citations. The author assumes full scientific responsibility for the integrity, methodology, accuracy, and conclusions of the research presented in this paper.
+
+\section{10 CONCLUSION}
+
+This paper evaluated the computational feasibility, parameter continuity, and storage trade-offs of real-time discrete-time Modified Nodal Analysis (MNA) for interactive audio synthesis. Through empirical benchmarking on an ARM64 Apple M1 Max host under standard real-time audio block constraints (128 samples @ 48~kHz, budget = $2,666.67\,\mu\text{s}$), we established:
+\begin{enumerate}
+\item A strongly non-linear 4-voice circuit solver with Newton--Raphson iteration and $2\times$ oversampling consumes an average of $22.98\%$ of the block deadline on the tested host across an 18,000-block steady-state evaluation, with zero deadline violations. Worst-case block latency reached $63.93\%$ of the deadline ($1,704.7\,\mu\text{s}$), leaving $36.07\%$ headroom during peak transients. Initial cold-start execution consumes at most $32.75\%$ of the budget when buffers are preallocated, showing that unbuffered pilot latency spikes are absent under preallocated memory layouts.
+\item In-place matrix updates preserve physical capacitor and inductor states, resulting in significantly fewer first-derivative outlier transitions ($p = 2.37 \times 10^{-6}$) than a matched 3-zone sample-crossfade baseline during a 60~Hz parameter sweep, though the low variance reflects within-trajectory solver consistency rather than multi-gesture generalization.
+\item An entire 61-preset netlist library occupies exactly 81,130 bytes, offering an orders-of-magnitude reduction in persistent asset footprint compared to modeled multi-sample representations (1.05~GB to 6.18~GB, representing a $12,992\times$ to $76,223\times$ difference), balanced against an approximately $8\times$ higher computational cost during synthesis.
+\end{enumerate}
+
+These findings demonstrate that discrete-time MNA provides a viable, memory-efficient synthesis approach on ARM64 architectures, supporting continuous interactive control while providing an empirical foundation for future deployment on mobile XR hardware.
+
+\section{11 SUPPLEMENTAL MATERIAL}
+To uphold scientific reproducibility, all benchmarking scripts, raw measurement datasets (JSON and CSV formats), and the interactive HTML test harness have been archived and prepared for open release upon publication at the public repository: \url{https://github.com/BoobalanArjunan/SpatialMind-RoomShift-Research}.
+
+\bibliographystyle{jaes}
+\bibliography{jaes}
+
+\section*{THE AUTHORS}
+
+\begin{biography}{Boobalan Arjunan}
+Boobalan Arjunan is a researcher and lead engineer at ComposerMind Labs LLP. His research focuses on advanced agentic systems, real-time procedural audio synthesis, discrete-time physical modeling, and spatial computing audio engines for extended reality (XR) environments. He specializes in deterministic Web Audio and AudioWorklet architectures, high-performance DSP simulation, and computational acoustics.
+\end{biography}
+
+\end{document}

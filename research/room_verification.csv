@@ -1,0 +1,11 @@
+room_id,target_rt60,measured_t20_rt60,measured_t30_rt60,sabine_rt60,eyring_rt60,drr_db,fit_r2,usable_decay_db,rir_length_s,verification_status,reason
+ROOM_01_SMALL_DRY,0.25,0.140,0.141,0.155,0.107,0.32,0.9995,96.6,1.50,PASSED,Meets Schroeder fit & dynamic range thresholds
+ROOM_02_STUDIO_MED,0.38,0.285,0.285,0.253,0.198,-6.26,0.9997,97.6,1.50,PASSED,Meets Schroeder fit & dynamic range thresholds
+ROOM_03_OFFICE,0.55,0.488,0.477,0.384,0.323,-10.27,0.9996,99.3,1.50,PASSED,Meets Schroeder fit & dynamic range thresholds
+ROOM_04_CLASSROOM,0.72,0.712,0.703,0.526,0.457,-13.87,0.9996,99.4,1.50,PASSED,Meets Schroeder fit & dynamic range thresholds
+ROOM_05_MED_HALL,0.95,0.985,0.976,0.708,0.627,-15.90,0.9998,100.0,1.50,PASSED,Meets Schroeder fit & dynamic range thresholds
+ROOM_06_RECITAL,1.20,1.306,1.287,0.935,0.838,-14.50,0.9996,99.1,1.50,PASSED,Meets Schroeder fit & dynamic range thresholds
+ROOM_07_CHURCH_SMALL,1.55,1.756,1.684,1.324,1.201,-15.71,0.9985,98.0,1.68,PASSED,Meets Schroeder fit & dynamic range thresholds
+ROOM_08_AUDITORIUM,1.85,2.402,2.309,1.744,1.600,-16.46,0.9983,97.5,2.24,PASSED,Meets Schroeder fit & dynamic range thresholds
+ROOM_09_CAVERN_DRY,1.40,1.045,1.072,0.913,0.742,-9.12,0.9988,88.9,1.50,PASSED,Meets Schroeder fit & dynamic range thresholds
+ROOM_10_CATHEDRAL,2.30,3.288,3.090,2.526,2.345,-18.05,0.9967,96.9,3.28,PASSED,Meets Schroeder fit & dynamic range thresholds
