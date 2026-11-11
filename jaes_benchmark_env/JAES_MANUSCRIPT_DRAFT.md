@@ -226,7 +226,7 @@ The results indicate that the $17.7\text{ ms}$ spike observed in unbuffered pilo
 ### 5.3 Parameter Modulation Continuity Under 60 Hz Control Updates
 To simulate interactive control input (such as 60 Hz gesture or tracking data), a continuous parameter sweep of the primary resistor ($940\,\Omega \to 23,500\,\Omega$) was executed over a 2.0-second interval across 20 repeated trials ($N = 20, df = 19, \alpha = 0.05$). The 20 trials evaluated a standardized single sweep trajectory with systematic sub-cent pitch detuning ($45.00$ to $45.02$ MIDI) and initial sample playback phase offsets (`phase = trial * 137`) to introduce micro-acoustic variations. Three metrics were quantified:
 1. **Spectral Flux:** The Euclidean norm of difference vectors between consecutive 512-point FFT magnitude spectra.
-2. **Quasi-Static Reference Distance:** The mean squared error (MSE) relative to a stepped physical reference where the circuit was allowed to reach thermal equilibrium at each parameter step.
+2. **Quasi-Static Reference Distance:** The mean squared error (MSE) relative to a stepped physical reference where the circuit was allowed to reach steady state at each parameter step.
 3. **$4\sigma$ Derivative Outliers:** Count of sample-to-sample first-derivative jumps exceeding four standard deviations ($|y[n] - y[n-1]| > 4\sigma_{\Delta}$).
 
 **Table 3:** Paired Statistical Analysis: Live MNA vs. 3-Zone Sample Crossfade under 60 Hz Modulation ($N=20$ Trials, $df=19$).

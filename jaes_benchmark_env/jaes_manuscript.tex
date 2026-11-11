@@ -158,6 +158,13 @@ h[k] = w[k] \cdot \frac{\sin(\pi k / 2)}{\pi k}, \quad k \in [-11, 11]
 \end{equation}
 where $w[k] = 0.42 - 0.5 \cos\left(\frac{2\pi(k+11)}{22}\right) + 0.08 \cos\left(\frac{4\pi(k+11)}{22}\right)$. The half-band structure ensures that every alternate coefficient is identically zero ($h[2m] = 0$ for $m \neq 0$), halving the multiplication overhead during real-time decimation.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/figure1_pipeline.pdf}
+\caption{Discrete-time MNA AudioWorklet rendering pipeline with $2\times$ oversampling and in-place state vector ($\mathbf{S}_1, \mathbf{S}_2$) retention.}
+\label{fig:pipeline}
+\end{figure}
+
 \section{Empirical Benchmark Methodology \& Setup}
 
 \subsection{Host Hardware and Audio Execution Constraints}
@@ -231,6 +238,13 @@ Fuzz Stage & Matched Baseline & 4 Voices & 55.2 & 54.6 & 56.9 & 118.9 & 2.07\% &
 \end{table*}
 
 Under 4-voice polyphony, the non-linear Fuzz model consumed an average of $612.7\,\mu\text{s}$ (22.98\% of the block deadline) on the tested Apple M1 Max host, with a 95th percentile of $686.6\,\mu\text{s}$ (25.75\%). Importantly, the maximum observed block duration reached $1,704.7\,\mu\text{s}$ (63.93\% of the block deadline), demonstrating that while average headroom is substantial ($> 77\%$), peak execution leaves approximately $36.07\%$ ($962.0\,\mu\text{s}$) unallocated during transient worst-case solving. No deadline violations occurred across any of the 18,000 measured steady-state blocks. Polyphonic execution scaled linearly ($R^2 = 0.9998$), reflecting independent voice calculations.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/figure2_polyphony.pdf}
+\caption{Steady-state block execution duration (mean and worst-case peak) across linear and non-linear circuit presets relative to the $2,666.67\,\mu\text{s}$ audio deadline on an Apple M1 Max host.}
+\label{fig:polyphony}
+\end{figure}
 
 \subsection{Cold-Start Timing Evaluation}
 Early unbuffered pilot benchmarks reported an isolated $17.7\text{ ms}$ processing spike on initial execution. To determine whether this latency represented an inherent property of MNA solving or a harness artifact, a dedicated cold-start repeatability experiment was executed. 
@@ -316,6 +330,13 @@ Modeled Full Chromatic ($88 \times 3$) & 16,104 WAVs & 6,183.94 MB (6.184 GB) & 
 
 \subsection{Lossy Audio Compression Comparison}
 In commercial applications, lossy audio compression codecs (e.g., Opus or AAC at 96--128~kbps) significantly reduce storage footprint. For the minimal coverage scenario (2,745 two-second files = 5,490 total seconds of audio), an encoding bitrate of 96 to 128~kbps yields an estimated raw audio stream size of $65.9\text{ to }87.8\text{ MB}$ (approximately $70\text{ to }95\text{ MB}$ when accounting for container headers and seek tables). While substantially more compact than uncompressed PCM, this compressed footprint remains approximately \textbf{$860\times$ to $1,170\times$} larger than the $81.1\text{ KB}$ netlist collection, and necessitates either background stream decompression buffering or runtime decoding overhead.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/figure3_storage.pdf}
+\caption{Logarithmic asset storage footprint comparison: verified 61 physical netlists vs. lossy compressed audio (Opus/AAC) and uncompressed PCM sample-bank coverage scenarios.}
+\label{fig:storage}
+\end{figure}
 
 \section{Limitations and Future Work}
 
