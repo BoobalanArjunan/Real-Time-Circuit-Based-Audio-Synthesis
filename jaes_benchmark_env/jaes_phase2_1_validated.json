@@ -1,0 +1,865 @@
+{
+  "experiment": "JAES Phase 2.1: Scientific Validation of Parameter Modulation",
+  "timestamp": "2026-11-11T09:15:43.953Z",
+  "environment": {
+    "cpuModel": "Apple M1 Max",
+    "cpuCores": 10,
+    "nodeVersion": "v24.5.0",
+    "sampleRate": 48000,
+    "blockSize": 128
+  },
+  "thresholds": {
+    "spikeThreshold4Sigma": 0.08740672503004282,
+    "budgetUs": 2666.6666666666665
+  },
+  "summaries": [
+    {
+      "condition": "Live MNA (Cold: Block 0 Included)",
+      "maxDelta": {
+        "p50": 0.47353127179667354,
+        "p95": 0.47382737387670204,
+        "max": 0.47382737387670204
+      },
+      "spikesAbove4Sigma": {
+        "p50": 481,
+        "p95": 483,
+        "max": 483
+      },
+      "spectralFlux": {
+        "p50": 42.99172877180395,
+        "p95": 43.057148494399996,
+        "max": 43.057148494399996
+      },
+      "distanceToQs": {
+        "p50": 0.10171677478590006,
+        "p95": 0.18583290771326869,
+        "max": 0.18583290771326869
+      },
+      "computeP50": {
+        "p50": 153.459,
+        "p95": 158.542,
+        "max": 158.542
+      },
+      "computeP95": {
+        "p50": 199,
+        "p95": 222.75,
+        "max": 222.75
+      },
+      "computeMax": {
+        "p50": 375.541,
+        "p95": 2031.833,
+        "max": 2031.833
+      },
+      "maxBlockIndices": [
+        0,
+        575,
+        9,
+        119,
+        94,
+        470,
+        1,
+        616,
+        175,
+        745,
+        655,
+        11,
+        0,
+        4,
+        316,
+        157,
+        177,
+        688,
+        109,
+        313
+      ]
+    },
+    {
+      "condition": "Live MNA (Warmed: Steady-State 60Hz)",
+      "maxDelta": {
+        "p50": 0.4732315391302109,
+        "p95": 0.47395208122907206,
+        "max": 0.47395208122907206
+      },
+      "spikesAbove4Sigma": {
+        "p50": 483,
+        "p95": 484,
+        "max": 484
+      },
+      "spectralFlux": {
+        "p50": 42.92791130664441,
+        "p95": 42.94594757060665,
+        "max": 42.94594757060665
+      },
+      "distanceToQs": {
+        "p50": 0.3029556693929473,
+        "p95": 0.36239587767717346,
+        "max": 0.36239587767717346
+      },
+      "computeP50": {
+        "p50": 152.667,
+        "p95": 153.875,
+        "max": 153.875
+      },
+      "computeP95": {
+        "p50": 197,
+        "p95": 202.417,
+        "max": 202.417
+      },
+      "computeMax": {
+        "p50": 394.042,
+        "p95": 1318.542,
+        "max": 1318.542
+      },
+      "maxBlockIndices": [
+        128,
+        207,
+        262,
+        313,
+        414,
+        511,
+        717,
+        697,
+        270,
+        28,
+        329,
+        648,
+        301,
+        107,
+        458,
+        605,
+        62,
+        232,
+        333,
+        407
+      ]
+    },
+    {
+      "condition": "Multi-Zone Sample Crossfade (30Hz Param LPF)",
+      "maxDelta": {
+        "p50": 0.47058779280632734,
+        "p95": 0.47395498552941717,
+        "max": 0.47395498552941717
+      },
+      "spikesAbove4Sigma": {
+        "p50": 511,
+        "p95": 519,
+        "max": 519
+      },
+      "spectralFlux": {
+        "p50": 39.96881382382525,
+        "p95": 41.30530214394978,
+        "max": 41.30530214394978
+      },
+      "distanceToQs": {
+        "p50": 0.3070620276319366,
+        "p95": 0.384948572365304,
+        "max": 0.384948572365304
+      },
+      "computeP50": {
+        "p50": 19,
+        "p95": 23.375,
+        "max": 23.375
+      },
+      "computeP95": {
+        "p50": 20.917,
+        "p95": 42.75,
+        "max": 42.75
+      },
+      "computeMax": {
+        "p50": 170.5,
+        "p95": 732.375,
+        "max": 732.375
+      },
+      "maxBlockIndices": [
+        63,
+        63,
+        355,
+        744,
+        111,
+        330,
+        423,
+        280,
+        382,
+        55,
+        253,
+        322,
+        149,
+        706,
+        646,
+        52,
+        576,
+        516,
+        519,
+        487
+      ]
+    }
+  ],
+  "rawTrials": {
+    "mnaCold": [
+      {
+        "maxDelta": 0.47382737387670204,
+        "spikesAbove4Sigma": 481,
+        "meanSpectralFlux": 43.057148494399996,
+        "normSpectralDistance": 0.0014901512791101789,
+        "meanComputeUs": 169.38672400000002,
+        "p50ComputeUs": 158.542,
+        "p95ComputeUs": 222.75,
+        "maxComputeUs": 2031.833,
+        "maxBlockIdx": 0
+      },
+      {
+        "maxDelta": 0.47353127179667354,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.99172877180395,
+        "normSpectralDistance": 0.10171677478590006,
+        "meanComputeUs": 156.76396400000004,
+        "p50ComputeUs": 154.167,
+        "p95ComputeUs": 197.667,
+        "maxComputeUs": 335.25,
+        "maxBlockIdx": 575
+      },
+      {
+        "maxDelta": 0.4730442953296006,
+        "spikesAbove4Sigma": 479,
+        "meanSpectralFlux": 42.974982889743394,
+        "normSpectralDistance": 0.18583290771326869,
+        "meanComputeUs": 157.6397959999999,
+        "p50ComputeUs": 154.625,
+        "p95ComputeUs": 201.708,
+        "maxComputeUs": 321.459,
+        "maxBlockIdx": 9
+      },
+      {
+        "maxDelta": 0.47382737387670204,
+        "spikesAbove4Sigma": 481,
+        "meanSpectralFlux": 43.057148494399996,
+        "normSpectralDistance": 0.0014901512791101789,
+        "meanComputeUs": 156.77642799999998,
+        "p50ComputeUs": 154.167,
+        "p95ComputeUs": 199.542,
+        "maxComputeUs": 326.667,
+        "maxBlockIdx": 119
+      },
+      {
+        "maxDelta": 0.47353127179667354,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.99172877180395,
+        "normSpectralDistance": 0.10171677478590006,
+        "meanComputeUs": 156.18193733333328,
+        "p50ComputeUs": 154.25,
+        "p95ComputeUs": 197.458,
+        "maxComputeUs": 308.042,
+        "maxBlockIdx": 94
+      },
+      {
+        "maxDelta": 0.4730442953296006,
+        "spikesAbove4Sigma": 479,
+        "meanSpectralFlux": 42.974982889743394,
+        "normSpectralDistance": 0.18583290771326869,
+        "meanComputeUs": 155.97617866666664,
+        "p50ComputeUs": 153.334,
+        "p95ComputeUs": 199.292,
+        "maxComputeUs": 323.833,
+        "maxBlockIdx": 470
+      },
+      {
+        "maxDelta": 0.47382737387670204,
+        "spikesAbove4Sigma": 481,
+        "meanSpectralFlux": 43.057148494399996,
+        "normSpectralDistance": 0.0014901512791101789,
+        "meanComputeUs": 155.08618800000005,
+        "p50ComputeUs": 152.333,
+        "p95ComputeUs": 201.084,
+        "maxComputeUs": 322,
+        "maxBlockIdx": 1
+      },
+      {
+        "maxDelta": 0.47353127179667354,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.99172877180395,
+        "normSpectralDistance": 0.10171677478590006,
+        "meanComputeUs": 155.6684319999999,
+        "p50ComputeUs": 153.334,
+        "p95ComputeUs": 195.541,
+        "maxComputeUs": 333.292,
+        "maxBlockIdx": 616
+      },
+      {
+        "maxDelta": 0.4730442953296006,
+        "spikesAbove4Sigma": 479,
+        "meanSpectralFlux": 42.974982889743394,
+        "normSpectralDistance": 0.18583290771326869,
+        "meanComputeUs": 156.36167466666666,
+        "p50ComputeUs": 153.958,
+        "p95ComputeUs": 197.666,
+        "maxComputeUs": 601.542,
+        "maxBlockIdx": 175
+      },
+      {
+        "maxDelta": 0.47382737387670204,
+        "spikesAbove4Sigma": 481,
+        "meanSpectralFlux": 43.057148494399996,
+        "normSpectralDistance": 0.0014901512791101789,
+        "meanComputeUs": 155.51456533333334,
+        "p50ComputeUs": 152.25,
+        "p95ComputeUs": 199,
+        "maxComputeUs": 391.875,
+        "maxBlockIdx": 745
+      },
+      {
+        "maxDelta": 0.47353127179667354,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.99172877180395,
+        "normSpectralDistance": 0.10171677478590006,
+        "meanComputeUs": 159.84261066666664,
+        "p50ComputeUs": 153.208,
+        "p95ComputeUs": 205.958,
+        "maxComputeUs": 1000.417,
+        "maxBlockIdx": 655
+      },
+      {
+        "maxDelta": 0.4730442953296006,
+        "spikesAbove4Sigma": 479,
+        "meanSpectralFlux": 42.974982889743394,
+        "normSpectralDistance": 0.18583290771326869,
+        "meanComputeUs": 157.74127466666667,
+        "p50ComputeUs": 154.25,
+        "p95ComputeUs": 203.166,
+        "maxComputeUs": 404.625,
+        "maxBlockIdx": 11
+      },
+      {
+        "maxDelta": 0.47382737387670204,
+        "spikesAbove4Sigma": 481,
+        "meanSpectralFlux": 43.057148494399996,
+        "normSpectralDistance": 0.0014901512791101789,
+        "meanComputeUs": 160.56977866666668,
+        "p50ComputeUs": 154.667,
+        "p95ComputeUs": 211.5,
+        "maxComputeUs": 686.583,
+        "maxBlockIdx": 0
+      },
+      {
+        "maxDelta": 0.47353127179667354,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.99172877180395,
+        "normSpectralDistance": 0.10171677478590006,
+        "meanComputeUs": 155.61182533333326,
+        "p50ComputeUs": 154.083,
+        "p95ComputeUs": 194.833,
+        "maxComputeUs": 389.291,
+        "maxBlockIdx": 4
+      },
+      {
+        "maxDelta": 0.4730442953296006,
+        "spikesAbove4Sigma": 479,
+        "meanSpectralFlux": 42.974982889743394,
+        "normSpectralDistance": 0.18583290771326869,
+        "meanComputeUs": 156.4098493333334,
+        "p50ComputeUs": 152.708,
+        "p95ComputeUs": 202.291,
+        "maxComputeUs": 349.709,
+        "maxBlockIdx": 316
+      },
+      {
+        "maxDelta": 0.47382737387670204,
+        "spikesAbove4Sigma": 481,
+        "meanSpectralFlux": 43.057148494399996,
+        "normSpectralDistance": 0.0014901512791101789,
+        "meanComputeUs": 154.3143453333333,
+        "p50ComputeUs": 152.334,
+        "p95ComputeUs": 191.541,
+        "maxComputeUs": 375.541,
+        "maxBlockIdx": 157
+      },
+      {
+        "maxDelta": 0.47353127179667354,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.99172877180395,
+        "normSpectralDistance": 0.10171677478590006,
+        "meanComputeUs": 157.38884266666665,
+        "p50ComputeUs": 153.25,
+        "p95ComputeUs": 195.708,
+        "maxComputeUs": 1059.541,
+        "maxBlockIdx": 177
+      },
+      {
+        "maxDelta": 0.4730442953296006,
+        "spikesAbove4Sigma": 479,
+        "meanSpectralFlux": 42.974982889743394,
+        "normSpectralDistance": 0.18583290771326869,
+        "meanComputeUs": 155.81098933333334,
+        "p50ComputeUs": 152.125,
+        "p95ComputeUs": 194.583,
+        "maxComputeUs": 800.583,
+        "maxBlockIdx": 688
+      },
+      {
+        "maxDelta": 0.47382737387670204,
+        "spikesAbove4Sigma": 481,
+        "meanSpectralFlux": 43.057148494399996,
+        "normSpectralDistance": 0.0014901512791101789,
+        "meanComputeUs": 154.80720799999997,
+        "p50ComputeUs": 152.584,
+        "p95ComputeUs": 193.416,
+        "maxComputeUs": 351.708,
+        "maxBlockIdx": 109
+      },
+      {
+        "maxDelta": 0.47353127179667354,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.99172877180395,
+        "normSpectralDistance": 0.10171677478590006,
+        "meanComputeUs": 154.60322266666665,
+        "p50ComputeUs": 153.459,
+        "p95ComputeUs": 193.542,
+        "maxComputeUs": 369.875,
+        "maxBlockIdx": 313
+      }
+    ],
+    "mnaWarm": [
+      {
+        "maxDelta": 0.47395208122907206,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.926581650016665,
+        "normSpectralDistance": 0.36239587767717346,
+        "meanComputeUs": 158.81080666666676,
+        "p50ComputeUs": 153.542,
+        "p95ComputeUs": 201.291,
+        "maxComputeUs": 1318.542,
+        "maxBlockIdx": 128
+      },
+      {
+        "maxDelta": 0.4732315391302109,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.94594757060665,
+        "normSpectralDistance": 0.3029556693929473,
+        "meanComputeUs": 157.0247973333334,
+        "p50ComputeUs": 153.208,
+        "p95ComputeUs": 200.542,
+        "maxComputeUs": 837.709,
+        "maxBlockIdx": 207
+      },
+      {
+        "maxDelta": 0.4724781047552824,
+        "spikesAbove4Sigma": 484,
+        "meanSpectralFlux": 42.92791130664441,
+        "normSpectralDistance": 0.21995731419919654,
+        "meanComputeUs": 157.57735333333338,
+        "p50ComputeUs": 153.334,
+        "p95ComputeUs": 202.25,
+        "maxComputeUs": 455.291,
+        "maxBlockIdx": 262
+      },
+      {
+        "maxDelta": 0.47395208122907206,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.926581650016665,
+        "normSpectralDistance": 0.36239587767717346,
+        "meanComputeUs": 157.24124666666657,
+        "p50ComputeUs": 152.75,
+        "p95ComputeUs": 198.5,
+        "maxComputeUs": 1189.042,
+        "maxBlockIdx": 313
+      },
+      {
+        "maxDelta": 0.4732315391302109,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.94594757060665,
+        "normSpectralDistance": 0.3029556693929473,
+        "meanComputeUs": 158.49389199999996,
+        "p50ComputeUs": 153.875,
+        "p95ComputeUs": 200.584,
+        "maxComputeUs": 959.208,
+        "maxBlockIdx": 414
+      },
+      {
+        "maxDelta": 0.4724781047552824,
+        "spikesAbove4Sigma": 484,
+        "meanSpectralFlux": 42.92791130664441,
+        "normSpectralDistance": 0.21995731419919654,
+        "meanComputeUs": 156.50308666666666,
+        "p50ComputeUs": 152.125,
+        "p95ComputeUs": 195.708,
+        "maxComputeUs": 933.375,
+        "maxBlockIdx": 511
+      },
+      {
+        "maxDelta": 0.47395208122907206,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.926581650016665,
+        "normSpectralDistance": 0.36239587767717346,
+        "meanComputeUs": 157.7363453333334,
+        "p50ComputeUs": 153.125,
+        "p95ComputeUs": 200.75,
+        "maxComputeUs": 778.834,
+        "maxBlockIdx": 717
+      },
+      {
+        "maxDelta": 0.4732315391302109,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.94594757060665,
+        "normSpectralDistance": 0.3029556693929473,
+        "meanComputeUs": 155.62615733333334,
+        "p50ComputeUs": 152.916,
+        "p95ComputeUs": 195.917,
+        "maxComputeUs": 354.709,
+        "maxBlockIdx": 697
+      },
+      {
+        "maxDelta": 0.4724781047552824,
+        "spikesAbove4Sigma": 484,
+        "meanSpectralFlux": 42.92791130664441,
+        "normSpectralDistance": 0.21995731419919654,
+        "meanComputeUs": 154.56806,
+        "p50ComputeUs": 151,
+        "p95ComputeUs": 193,
+        "maxComputeUs": 367.375,
+        "maxBlockIdx": 270
+      },
+      {
+        "maxDelta": 0.47395208122907206,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.926581650016665,
+        "normSpectralDistance": 0.36239587767717346,
+        "meanComputeUs": 155.3412519999999,
+        "p50ComputeUs": 153.666,
+        "p95ComputeUs": 196.208,
+        "maxComputeUs": 345.875,
+        "maxBlockIdx": 28
+      },
+      {
+        "maxDelta": 0.4732315391302109,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.94594757060665,
+        "normSpectralDistance": 0.3029556693929473,
+        "meanComputeUs": 154.01769866666672,
+        "p50ComputeUs": 151.5,
+        "p95ComputeUs": 192.125,
+        "maxComputeUs": 308.167,
+        "maxBlockIdx": 329
+      },
+      {
+        "maxDelta": 0.4724781047552824,
+        "spikesAbove4Sigma": 484,
+        "meanSpectralFlux": 42.92791130664441,
+        "normSpectralDistance": 0.21995731419919654,
+        "meanComputeUs": 156.0882613333333,
+        "p50ComputeUs": 152.208,
+        "p95ComputeUs": 195.542,
+        "maxComputeUs": 363.292,
+        "maxBlockIdx": 648
+      },
+      {
+        "maxDelta": 0.47395208122907206,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.926581650016665,
+        "normSpectralDistance": 0.36239587767717346,
+        "meanComputeUs": 157.67212133333342,
+        "p50ComputeUs": 151.5,
+        "p95ComputeUs": 202.417,
+        "maxComputeUs": 739.584,
+        "maxBlockIdx": 301
+      },
+      {
+        "maxDelta": 0.4732315391302109,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.94594757060665,
+        "normSpectralDistance": 0.3029556693929473,
+        "meanComputeUs": 155.17052533333325,
+        "p50ComputeUs": 152.667,
+        "p95ComputeUs": 197,
+        "maxComputeUs": 354.292,
+        "maxBlockIdx": 107
+      },
+      {
+        "maxDelta": 0.4724781047552824,
+        "spikesAbove4Sigma": 484,
+        "meanSpectralFlux": 42.92791130664441,
+        "normSpectralDistance": 0.21995731419919654,
+        "meanComputeUs": 154.73887599999998,
+        "p50ComputeUs": 152.167,
+        "p95ComputeUs": 193.667,
+        "maxComputeUs": 332.458,
+        "maxBlockIdx": 458
+      },
+      {
+        "maxDelta": 0.47395208122907206,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.926581650016665,
+        "normSpectralDistance": 0.36239587767717346,
+        "meanComputeUs": 154.5170253333334,
+        "p50ComputeUs": 150.375,
+        "p95ComputeUs": 194.208,
+        "maxComputeUs": 317.875,
+        "maxBlockIdx": 605
+      },
+      {
+        "maxDelta": 0.4732315391302109,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.94594757060665,
+        "normSpectralDistance": 0.3029556693929473,
+        "meanComputeUs": 155.22050666666667,
+        "p50ComputeUs": 152.791,
+        "p95ComputeUs": 195.584,
+        "maxComputeUs": 394.042,
+        "maxBlockIdx": 62
+      },
+      {
+        "maxDelta": 0.4724781047552824,
+        "spikesAbove4Sigma": 484,
+        "meanSpectralFlux": 42.92791130664441,
+        "normSpectralDistance": 0.21995731419919654,
+        "meanComputeUs": 155.30566799999997,
+        "p50ComputeUs": 152.083,
+        "p95ComputeUs": 197.417,
+        "maxComputeUs": 337.292,
+        "maxBlockIdx": 232
+      },
+      {
+        "maxDelta": 0.47395208122907206,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.926581650016665,
+        "normSpectralDistance": 0.36239587767717346,
+        "meanComputeUs": 156.87769066666675,
+        "p50ComputeUs": 152,
+        "p95ComputeUs": 197.167,
+        "maxComputeUs": 789.875,
+        "maxBlockIdx": 333
+      },
+      {
+        "maxDelta": 0.4732315391302109,
+        "spikesAbove4Sigma": 483,
+        "meanSpectralFlux": 42.94594757060665,
+        "normSpectralDistance": 0.3029556693929473,
+        "meanComputeUs": 154.7526413333334,
+        "p50ComputeUs": 151.75,
+        "p95ComputeUs": 194.292,
+        "maxComputeUs": 357.334,
+        "maxBlockIdx": 407
+      }
+    ],
+    "sample": [
+      {
+        "maxDelta": 0.47364430996822193,
+        "spikesAbove4Sigma": 480,
+        "meanSpectralFlux": 41.27399304440713,
+        "normSpectralDistance": 0.018845727926264617,
+        "meanComputeUs": 25.919218666666705,
+        "p50ComputeUs": 22.792,
+        "p95ComputeUs": 41.541,
+        "maxComputeUs": 205.667,
+        "maxBlockIdx": 63
+      },
+      {
+        "maxDelta": 0.4652702398598194,
+        "spikesAbove4Sigma": 511,
+        "meanSpectralFlux": 39.820568128894124,
+        "normSpectralDistance": 0.3715761655069171,
+        "meanComputeUs": 25.928617333333303,
+        "p50ComputeUs": 23.375,
+        "p95ComputeUs": 42.75,
+        "maxComputeUs": 624.75,
+        "maxBlockIdx": 63
+      },
+      {
+        "maxDelta": 0.47058779280632734,
+        "spikesAbove4Sigma": 517,
+        "meanSpectralFlux": 40.00078378534015,
+        "normSpectralDistance": 0.2685614732389179,
+        "meanComputeUs": 20.165223999999938,
+        "p50ComputeUs": 19,
+        "p95ComputeUs": 22.25,
+        "maxComputeUs": 145.042,
+        "maxBlockIdx": 355
+      },
+      {
+        "maxDelta": 0.473540392878931,
+        "spikesAbove4Sigma": 486,
+        "meanSpectralFlux": 41.30530214394978,
+        "normSpectralDistance": 0.0871897112669303,
+        "meanComputeUs": 20.29738133333331,
+        "p50ComputeUs": 19,
+        "p95ComputeUs": 21.625,
+        "maxComputeUs": 166.166,
+        "maxBlockIdx": 744
+      },
+      {
+        "maxDelta": 0.46342033287510276,
+        "spikesAbove4Sigma": 516,
+        "meanSpectralFlux": 39.819260741972045,
+        "normSpectralDistance": 0.3454246499450991,
+        "meanComputeUs": 19.72162266666657,
+        "p50ComputeUs": 19,
+        "p95ComputeUs": 20.125,
+        "maxComputeUs": 156.958,
+        "maxBlockIdx": 111
+      },
+      {
+        "maxDelta": 0.4731440320611,
+        "spikesAbove4Sigma": 517,
+        "meanSpectralFlux": 39.99384394970925,
+        "normSpectralDistance": 0.3145463563307791,
+        "meanComputeUs": 19.896611999999966,
+        "p50ComputeUs": 19,
+        "p95ComputeUs": 20.834,
+        "maxComputeUs": 152.625,
+        "maxBlockIdx": 330
+      },
+      {
+        "maxDelta": 0.473470501601696,
+        "spikesAbove4Sigma": 487,
+        "meanSpectralFlux": 41.295319952372644,
+        "normSpectralDistance": 0.15807725819085885,
+        "meanComputeUs": 20.08000799999999,
+        "p50ComputeUs": 19,
+        "p95ComputeUs": 20.917,
+        "maxComputeUs": 169.75,
+        "maxBlockIdx": 423
+      },
+      {
+        "maxDelta": 0.4623912163078785,
+        "spikesAbove4Sigma": 509,
+        "meanSpectralFlux": 39.86657677051028,
+        "normSpectralDistance": 0.3070620276319366,
+        "meanComputeUs": 20.223713333333357,
+        "p50ComputeUs": 19.041,
+        "p95ComputeUs": 21.375,
+        "maxComputeUs": 139.875,
+        "maxBlockIdx": 280
+      },
+      {
+        "maxDelta": 0.47181527502834797,
+        "spikesAbove4Sigma": 519,
+        "meanSpectralFlux": 39.96881382382525,
+        "normSpectralDistance": 0.34911737825668865,
+        "meanComputeUs": 23.774168000000007,
+        "p50ComputeUs": 22.667,
+        "p95ComputeUs": 24.916,
+        "maxComputeUs": 218.625,
+        "maxBlockIdx": 382
+      },
+      {
+        "maxDelta": 0.47331505455076694,
+        "spikesAbove4Sigma": 487,
+        "meanSpectralFlux": 41.277717707780354,
+        "normSpectralDistance": 0.2224871118038477,
+        "meanComputeUs": 23.433918666666663,
+        "p50ComputeUs": 22.417,
+        "p95ComputeUs": 24.25,
+        "maxComputeUs": 193.458,
+        "maxBlockIdx": 55
+      },
+      {
+        "maxDelta": 0.4606315568089485,
+        "spikesAbove4Sigma": 510,
+        "meanSpectralFlux": 39.922692619191174,
+        "normSpectralDistance": 0.2576286508391691,
+        "meanComputeUs": 19.158209333333446,
+        "p50ComputeUs": 18.041,
+        "p95ComputeUs": 21.708,
+        "maxComputeUs": 161.333,
+        "maxBlockIdx": 253
+      },
+      {
+        "maxDelta": 0.4688724675215781,
+        "spikesAbove4Sigma": 513,
+        "meanSpectralFlux": 39.94076305681027,
+        "normSpectralDistance": 0.3729930391277694,
+        "meanComputeUs": 20.647385333333432,
+        "p50ComputeUs": 18.041,
+        "p95ComputeUs": 20.958,
+        "maxComputeUs": 732.375,
+        "maxBlockIdx": 322
+      },
+      {
+        "maxDelta": 0.47395498552941717,
+        "spikesAbove4Sigma": 486,
+        "meanSpectralFlux": 41.27747484624725,
+        "normSpectralDistance": 0.2811823978589015,
+        "meanComputeUs": 18.372899999999966,
+        "p50ComputeUs": 18,
+        "p95ComputeUs": 18.541,
+        "maxComputeUs": 155.625,
+        "maxBlockIdx": 149
+      },
+      {
+        "maxDelta": 0.4582822285592556,
+        "spikesAbove4Sigma": 513,
+        "meanSpectralFlux": 39.94083798277258,
+        "normSpectralDistance": 0.20029903638527563,
+        "meanComputeUs": 18.662346666666664,
+        "p50ComputeUs": 18,
+        "p95ComputeUs": 18.792,
+        "maxComputeUs": 181.25,
+        "maxBlockIdx": 706
+      },
+      {
+        "maxDelta": 0.46782929450273514,
+        "spikesAbove4Sigma": 516,
+        "meanSpectralFlux": 39.90241579267404,
+        "normSpectralDistance": 0.38470760292788575,
+        "meanComputeUs": 18.78250533333344,
+        "p50ComputeUs": 18.042,
+        "p95ComputeUs": 19.416,
+        "maxComputeUs": 205.041,
+        "maxBlockIdx": 646
+      },
+      {
+        "maxDelta": 0.4739398187666666,
+        "spikesAbove4Sigma": 486,
+        "meanSpectralFlux": 41.25091411798875,
+        "normSpectralDistance": 0.327464896191488,
+        "meanComputeUs": 18.78363066666665,
+        "p50ComputeUs": 18,
+        "p95ComputeUs": 19.292,
+        "maxComputeUs": 168.875,
+        "maxBlockIdx": 52
+      },
+      {
+        "maxDelta": 0.4695076663047075,
+        "spikesAbove4Sigma": 507,
+        "meanSpectralFlux": 39.95037999353703,
+        "normSpectralDistance": 0.13409242391510512,
+        "meanComputeUs": 18.78794266666664,
+        "p50ComputeUs": 18,
+        "p95ComputeUs": 19.041,
+        "maxComputeUs": 170.5,
+        "maxBlockIdx": 576
+      },
+      {
+        "maxDelta": 0.46630366891622543,
+        "spikesAbove4Sigma": 512,
+        "meanSpectralFlux": 39.85572884993248,
+        "normSpectralDistance": 0.384948572365304,
+        "meanComputeUs": 18.606059999999967,
+        "p50ComputeUs": 18,
+        "p95ComputeUs": 19.375,
+        "maxComputeUs": 222.333,
+        "maxBlockIdx": 516
+      },
+      {
+        "maxDelta": 0.47392757126362994,
+        "spikesAbove4Sigma": 487,
+        "meanSpectralFlux": 41.206572488397335,
+        "normSpectralDistance": 0.3629223138542714,
+        "meanComputeUs": 18.421053333333216,
+        "p50ComputeUs": 17.959,
+        "p95ComputeUs": 18.416,
+        "maxComputeUs": 160.125,
+        "maxBlockIdx": 519
+      },
+      {
+        "maxDelta": 0.46824267134070396,
+        "spikesAbove4Sigma": 514,
+        "meanSpectralFlux": 39.95538456889253,
+        "normSpectralDistance": 0.07612009258866326,
+        "meanComputeUs": 18.771495999999914,
+        "p50ComputeUs": 18,
+        "p95ComputeUs": 19.25,
+        "maxComputeUs": 205.834,
+        "maxBlockIdx": 487
+      }
+    ]
+  }
+}
