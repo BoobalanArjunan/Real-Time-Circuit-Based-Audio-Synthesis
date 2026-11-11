@@ -19,22 +19,18 @@
 
 \begin{document}
 
-\title{Real-Time Discrete-Time Modified Nodal Analysis for Interactive Audio: Computational Feasibility, Parameter Continuity, and Modeled Storage Trade-Offs}
+\title{Real-Time Modified Nodal Analysis for Interactive Audio: Feasibility, Continuity, and Storage Trade-Offs}
 
 \author{Boobalan~Arjunan%
 \thanks{B. Arjunan is with ComposerMind Labs LLP (e-mail: research@composermind.com). Manuscript received November 2026.}}
 
 \markboth{Journal of the Audio Engineering Society,~Vol.~XX, No.~X, November~2026}%
-{Arjunan: Real-Time Discrete-Time Modified Nodal Analysis for Interactive Audio}
+{Arjunan: Real-Time Modified Nodal Analysis for Interactive Audio}
 
 \maketitle
 
 \begin{abstract}
-In interactive spatial computing and Extended Reality (XR) audio environments, real-time sound generators must navigate competing engineering constraints: deterministic sub-buffer execution deadlines (typically 2.67~ms for 128-sample blocks at 48~kHz), constrained resident memory footprints on embedded devices, and responsive parameter modulation under continuous interactive control (e.g., 60~Hz gesture or tracking input). Conventional audio engines rely heavily on multi-sample playback, which requires substantial storage for multi-zone parameter coverage and can exhibit phase-cancellation artifacts or timbral stepping when crossfading between discrete recordings.
-
-This paper investigates whether state-preserving, circuit-based procedural synthesis using discrete-time Modified Nodal Analysis (MNA) with iterative Newton--Raphson non-linear solving can support rapid interactive parameter changes while offering a practical compute--storage trade-off against multi-sample playback. We evaluate an implementation of discrete-time MNA designed for Web Audio \texttt{AudioWorkletProcessor} architectures. High-resolution profiling was conducted via headless V8 engine execution (\texttt{process.hrtime.bigint()}) on an Apple M1 Max host (ARM64 architecture) to avoid timer quantization, accompanied by browser-level execution verification in Chromium. Across linear (RC filter) and non-linear (half-wave rectifier, multi-diode fuzz) circuit topologies, we compare 4-voice MNA against a matched 3-zone sample-crossfade baseline with 30~Hz control smoothing.
-
-Our empirical and modeled findings demonstrate: (1) On the benchmarked Apple M1 Max host, steady-state 4-voice MNA consumes an average between 10.31\% (274.9~$\mu$s, RC filter) and 22.98\% (612.7~$\mu$s, non-linear fuzz) of the 2,666.67~$\mu$s audio block deadline across an 18,000-block factorial benchmark (18 conditions $\times$ 1,000 blocks), with zero deadline violations. However, peak observed block durations for 4-voice fuzz reached 1,704.7~$\mu$s (63.93\% of the block budget), indicating that real-time headroom narrows to 36.07\% during transient peak execution on the host processor. Browser-level execution in Chromium confirmed engine instantiation and matching median loads within timer quantization limits. In a dedicated 20-trial cold-start evaluation, preallocated initial block execution completed within 873.4~$\mu$s (32.75\% of budget), showing that unbuffered pilot latency spikes are absent under preallocated memory layouts. (2) Under a standardized 60~Hz parameter sweep across 20 repeated trials ($df=19$, $\alpha = 0.05$) with systematic phase and micro-pitch perturbations, MNA produced significantly fewer first-derivative sample outlier spikes ($|y[n] - y[n-1]| > 4\sigma_\Delta$) than the 3-zone sample crossfader ($t = -6.64, p = 2.37 \times 10^{-6}$). While state preservation is an architectural property established by the solver's companion equations and in-place state retention, this derivative metric indicates that MNA generates smoother sample-to-sample transitions during the sweep, though it does not establish perceptual audibility differences. The paired difference in distance to a quasi-static stepped physical reference failed to reach statistical significance ($t = 1.11, p = 0.2827$). Because the trials evaluated a single canonical sweep trajectory, the low variance reflects within-trajectory solver consistency rather than broad generalization across arbitrary user gestures. (3) The verified binary netlist library for all 61 synthesizer presets occupies 81,130 bytes (79.23~KiB; 1,330.0 bytes/preset) of persistent asset data, excluding runtime engine heap and shared codebase memory. In comparison, modeled uncompressed 16-bit PCM multi-sample banks providing equivalent parameter-zone coverage require an estimated 1.05~GB (minimal coverage) to 6.18~GB (full chromatic coverage), representing a $12,992\times$ to $76,223\times$ difference in asset storage, balanced against an approximately $8\times$ higher mean CPU execution cost for MNA relative to sample crossfading. For the minimal-coverage scenario, lossy compression at 96--128~kbps yields an estimated 70--95~MB package, which remains approximately $860\times$ to $1,170\times$ larger than the netlist collection.
+Interactive spatial audio engines require deterministic sub-buffer execution deadlines, minimal memory footprints, and responsive modulation under continuous parameter sweeps. Conventional multi-sample playback demands substantial storage for multi-zone parameter coverage and can introduce phase cancellation during crossfading. This paper evaluates discrete-time Modified Nodal Analysis (MNA) with iterative Newton--Raphson non-linear solving in Web Audio \texttt{AudioWorkletProcessor} architectures. High-resolution profiling on an ARM64 Apple M1 Max host demonstrated that steady-state 4-voice MNA consumes an average of 10.31\% to 22.98\% (612.7~$\mu$s) of the 2,666.67~$\mu$s block deadline across an 18,000-block factorial benchmark, with zero deadline violations (peak transient duration: 1,704.7~$\mu$s, 36.07\% headroom). In a dedicated 20-trial evaluation, preallocated cold-start blocks completed within 873.4~$\mu$s. Under a 60~Hz parameter sweep across 20 trials, in-place reactive state preservation produced significantly fewer first-derivative outlier spikes than a matched 3-zone sample-crossfade baseline ($t = -6.64, p = 2.37 \times 10^{-6}$). The verified 61-preset netlist library occupies 81,130 bytes, representing a $12,992\times$ to $76,223\times$ storage reduction compared to modeled uncompressed PCM sample banks (1.05 to 6.18~GB) and $860\times$ to $1,170\times$ versus lossy compressed audio (70 to 95~MB), balanced against an $8\times$ higher computational cost.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -344,7 +340,14 @@ This paper evaluated the computational feasibility, parameter continuity, and st
 
 These findings demonstrate that discrete-time MNA provides a viable, memory-efficient synthesis approach on ARM64 architectures, supporting continuous interactive control while providing an empirical foundation for future deployment on mobile XR hardware.
 
+\section*{Use of Artificial Intelligence and Large Language Models}
+During the preparation of this manuscript, the author utilized large language model assistants (Claude 3.7 Sonnet by Anthropic and ChatGPT by OpenAI, November 2026) for technical drafting, code formatting, literature citation aggregation, and LaTeX document preparation. Following initial AI-assisted drafting, the author independently verified, revised, and validated all mathematical formulations, benchmark execution scripts, empirical dataset calculations, and bibliographic citations. The author assumes full scientific responsibility for the integrity, methodology, accuracy, and conclusions of the research presented in this paper.
+
 \bibliographystyle{IEEEtran}
 \bibliography{references}
+
+\begin{IEEEbiographynophoto}{Boobalan Arjunan}
+is a researcher and lead engineer at ComposerMind Labs LLP. His research focuses on advanced agentic systems, real-time procedural audio synthesis, discrete-time physical modeling, and spatial computing audio engines for extended reality (XR) environments. He specializes in deterministic Web Audio and AudioWorklet architectures, high-performance DSP simulation, and computational acoustics.
+\end{IEEEbiographynophoto}
 
 \end{document}
