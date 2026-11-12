@@ -1,4 +1,4 @@
-# Real-Time Modified Nodal Analysis for Interactive Audio: Feasibility, Continuity, and Storage Trade-Offs
+# Real-Time Circuit-Based Audio Synthesis Using Modified Nodal Analysis: Feasibility, Signal Continuity, and Storage Trade-Offs
 
 **Target Journal:** *Journal of the Audio Engineering Society (JAES)*  
 **Manuscript Category:** Research Paper  
@@ -374,9 +374,13 @@ During the preparation of this manuscript, the author utilized large language mo
 
 ## Author Biography
 
-**Boobalan Arjunan** is a researcher and lead engineer at ComposerMind Labs LLP. His research focuses on advanced agentic systems, real-time procedural audio synthesis, discrete-time physical modeling, and spatial computing audio engines for extended reality (XR) environments. He specializes in deterministic Web Audio and AudioWorklet architectures, high-performance DSP simulation, and computational acoustics.
+**Boobalan Arjunan** is the Founder and Lead AI/ML Architect at ComposerMind Labs, Chennai, India, and a music technologist with over 18 years of experience in software engineering and emerging technologies.
+
+He spent 14 years at IBM as a Software Developer and Technical Lead, developing enterprise mainframe applications across banking, transportation, telecommunications, logistics, energy, utilities, and automotive industries. He subsequently specialized in Azure Data Engineering, cloud computing, and AI/ML technologies.
+
+His current research focuses on Audio AI, Music Information Retrieval, Digital Signal Processing, Generative AI, Deep Learning, Neural Audio Synthesis, and Circuit-Based Physical Modeling. At ComposerMind Labs, he leads research and development of intelligent audio systems, music synthesis technologies, and machine learning datasets.
 
 ---
 
 ## Reproducibility Statement
-To uphold the highest standards of scientific reproducibility, all benchmarking scripts, raw measurement datasets (JSON and CSV formats), and the interactive HTML test harness have been archived and prepared for open release upon publication. Review copies of the raw datasets and code are included in the supplementary materials accompanying this manuscript submission.
+To uphold the highest standards of scientific reproducibility, all benchmarking scripts, raw measurement datasets (JSON and CSV formats), and the interactive HTML test harness have been archived and prepared for open release upon publication at the public research repository: https://github.com/BoobalanArjunan/Real-Time-Circuit-Based-Audio-Synthesis. Review copies of the raw datasets and code are included in the supplementary materials accompanying this manuscript submission.
