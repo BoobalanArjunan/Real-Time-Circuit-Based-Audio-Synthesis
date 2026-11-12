@@ -1,0 +1,507 @@
+{
+  "experiment": "JAES Phase 2: Parameter Continuity and Modulation Responsiveness",
+  "timestamp": "2026-11-12T11:32:29.159Z",
+  "environment": {
+    "cpuModel": "Apple M1 Max",
+    "cpuCores": 10,
+    "nodeVersion": "v24.5.0",
+    "sampleRate": 48000,
+    "blockSize": 128
+  },
+  "settings": {
+    "preset": "Fuzz",
+    "controlRateHz": 60,
+    "sweepRange": [
+      940,
+      23500
+    ],
+    "staticReferenceBaselineHf": 0.0007276039104338168,
+    "trialsCount": 20
+  },
+  "summaries": [
+    {
+      "condition": "Live MNA (Physical Circuit Solver)",
+      "discontinuity": {
+        "mean": 0.48316332381218674,
+        "p50": 0.4828915372490883,
+        "p95": 0.48391813784837723,
+        "max": 0.48391813784837723
+      },
+      "artifactRatio": {
+        "mean": 0.996791768909867,
+        "p50": 0.998149172714233,
+        "p95": 0.9992148902038681,
+        "max": 0.9992148902038681
+      },
+      "spectralFlux": {
+        "mean": 43.00960191009442,
+        "p50": 42.99172877180395,
+        "p95": 43.057148494399996,
+        "max": 43.057148494399996
+      },
+      "computeP50": {
+        "mean": 153.4,
+        "p50": 153.291,
+        "p95": 157.208,
+        "max": 157.208
+      },
+      "computeP95": {
+        "mean": 196.1146,
+        "p50": 193.959,
+        "p95": 226.333,
+        "max": 226.333
+      },
+      "computeMax": {
+        "mean": 486.32705000000004,
+        "p50": 281.584,
+        "p95": 1857.208,
+        "max": 1857.208
+      }
+    },
+    {
+      "condition": "Smoothed Sample Playback (30 Hz LPF)",
+      "discontinuity": {
+        "mean": 0.3789136937819421,
+        "p50": 0.3858009874820709,
+        "p95": 0.3885234668850899,
+        "max": 0.3885234668850899
+      },
+      "artifactRatio": {
+        "mean": 0.2688790210081249,
+        "p50": 0.2443433057260988,
+        "p95": 0.3163725603734047,
+        "max": 0.3163725603734047
+      },
+      "spectralFlux": {
+        "mean": 21.130781805777566,
+        "p50": 20.930914567796634,
+        "p95": 21.60515696511772,
+        "max": 21.60515696511772
+      },
+      "computeP50": {
+        "mean": 14.91235,
+        "p50": 14.75,
+        "p95": 15.542,
+        "max": 15.542
+      },
+      "computeP95": {
+        "mean": 15.720949999999998,
+        "p50": 15.542,
+        "p95": 20.375,
+        "max": 20.375
+      },
+      "computeMax": {
+        "mean": 56.7999,
+        "p50": 50.042,
+        "p95": 273.708,
+        "max": 273.708
+      }
+    }
+  ],
+  "rawTrials": {
+    "liveMNA": [
+      {
+        "maxDiscontinuity": 0.4828915372490883,
+        "excessArtifactRatio": 0.9932051586406951,
+        "meanSpectralFlux": 43.057148494399996,
+        "maxSpectralFlux": 165.82456503212964,
+        "meanComputeUs": 169.53361066666668,
+        "p50ComputeUs": 156.709,
+        "p95ComputeUs": 226.333,
+        "maxComputeUs": 1857.208
+      },
+      {
+        "maxDiscontinuity": 0.4827881269156933,
+        "excessArtifactRatio": 0.9992148902038681,
+        "meanSpectralFlux": 42.99172877180395,
+        "maxSpectralFlux": 165.66116124630423,
+        "meanComputeUs": 155.50521333333333,
+        "p50ComputeUs": 153.375,
+        "p95ComputeUs": 193.75,
+        "maxComputeUs": 297.583
+      },
+      {
+        "maxDiscontinuity": 0.48391813784837723,
+        "excessArtifactRatio": 0.998149172714233,
+        "meanSpectralFlux": 42.974982889743394,
+        "maxSpectralFlux": 164.71999086232665,
+        "meanComputeUs": 155.9291586666666,
+        "p50ComputeUs": 153.75,
+        "p95ComputeUs": 195.875,
+        "maxComputeUs": 281.584
+      },
+      {
+        "maxDiscontinuity": 0.4828915372490883,
+        "excessArtifactRatio": 0.9932051586406951,
+        "meanSpectralFlux": 43.057148494399996,
+        "maxSpectralFlux": 165.82456503212964,
+        "meanComputeUs": 154.83944666666665,
+        "p50ComputeUs": 153.083,
+        "p95ComputeUs": 193.959,
+        "maxComputeUs": 271.042
+      },
+      {
+        "maxDiscontinuity": 0.4827881269156933,
+        "excessArtifactRatio": 0.9992148902038681,
+        "meanSpectralFlux": 42.99172877180395,
+        "maxSpectralFlux": 165.66116124630423,
+        "meanComputeUs": 154.73438399999998,
+        "p50ComputeUs": 153.25,
+        "p95ComputeUs": 192.791,
+        "maxComputeUs": 289.125
+      },
+      {
+        "maxDiscontinuity": 0.48391813784837723,
+        "excessArtifactRatio": 0.998149172714233,
+        "meanSpectralFlux": 42.974982889743394,
+        "maxSpectralFlux": 164.71999086232665,
+        "meanComputeUs": 154.68898266666662,
+        "p50ComputeUs": 153.042,
+        "p95ComputeUs": 193.25,
+        "maxComputeUs": 277.875
+      },
+      {
+        "maxDiscontinuity": 0.4828915372490883,
+        "excessArtifactRatio": 0.9932051586406951,
+        "meanSpectralFlux": 43.057148494399996,
+        "maxSpectralFlux": 165.82456503212964,
+        "meanComputeUs": 154.41572133333332,
+        "p50ComputeUs": 151.708,
+        "p95ComputeUs": 192.5,
+        "maxComputeUs": 263.583
+      },
+      {
+        "maxDiscontinuity": 0.4827881269156933,
+        "excessArtifactRatio": 0.9992148902038681,
+        "meanSpectralFlux": 42.99172877180395,
+        "maxSpectralFlux": 165.66116124630423,
+        "meanComputeUs": 154.80261600000003,
+        "p50ComputeUs": 153.291,
+        "p95ComputeUs": 193.958,
+        "maxComputeUs": 361.041
+      },
+      {
+        "maxDiscontinuity": 0.48391813784837723,
+        "excessArtifactRatio": 0.998149172714233,
+        "meanSpectralFlux": 42.974982889743394,
+        "maxSpectralFlux": 164.71999086232665,
+        "meanComputeUs": 153.67121733333332,
+        "p50ComputeUs": 152,
+        "p95ComputeUs": 191.25,
+        "maxComputeUs": 255.416
+      },
+      {
+        "maxDiscontinuity": 0.4828915372490883,
+        "excessArtifactRatio": 0.9932051586406951,
+        "meanSpectralFlux": 43.057148494399996,
+        "maxSpectralFlux": 165.82456503212964,
+        "meanComputeUs": 154.33251066666668,
+        "p50ComputeUs": 151.875,
+        "p95ComputeUs": 192.667,
+        "maxComputeUs": 268.959
+      },
+      {
+        "maxDiscontinuity": 0.4827881269156933,
+        "excessArtifactRatio": 0.9992148902038681,
+        "meanSpectralFlux": 42.99172877180395,
+        "maxSpectralFlux": 165.66116124630423,
+        "meanComputeUs": 154.45995600000003,
+        "p50ComputeUs": 153.291,
+        "p95ComputeUs": 190.584,
+        "maxComputeUs": 291.459
+      },
+      {
+        "maxDiscontinuity": 0.48391813784837723,
+        "excessArtifactRatio": 0.998149172714233,
+        "meanSpectralFlux": 42.974982889743394,
+        "maxSpectralFlux": 164.71999086232665,
+        "meanComputeUs": 154.91840933333344,
+        "p50ComputeUs": 152.042,
+        "p95ComputeUs": 193.625,
+        "maxComputeUs": 274.125
+      },
+      {
+        "maxDiscontinuity": 0.4828915372490883,
+        "excessArtifactRatio": 0.9932051586406951,
+        "meanSpectralFlux": 43.057148494399996,
+        "maxSpectralFlux": 165.82456503212964,
+        "meanComputeUs": 159.01941466666668,
+        "p50ComputeUs": 153.625,
+        "p95ComputeUs": 200,
+        "maxComputeUs": 1185.125
+      },
+      {
+        "maxDiscontinuity": 0.4827881269156933,
+        "excessArtifactRatio": 0.9992148902038681,
+        "meanSpectralFlux": 42.99172877180395,
+        "maxSpectralFlux": 165.66116124630423,
+        "meanComputeUs": 166.0544386666667,
+        "p50ComputeUs": 157.208,
+        "p95ComputeUs": 201.209,
+        "maxComputeUs": 1835.833
+      },
+      {
+        "maxDiscontinuity": 0.48391813784837723,
+        "excessArtifactRatio": 0.998149172714233,
+        "meanSpectralFlux": 42.974982889743394,
+        "maxSpectralFlux": 164.71999086232665,
+        "meanComputeUs": 155.08706400000003,
+        "p50ComputeUs": 153.334,
+        "p95ComputeUs": 194.25,
+        "maxComputeUs": 269.167
+      },
+      {
+        "maxDiscontinuity": 0.4828915372490883,
+        "excessArtifactRatio": 0.9932051586406951,
+        "meanSpectralFlux": 43.057148494399996,
+        "maxSpectralFlux": 165.82456503212964,
+        "meanComputeUs": 155.01820266666664,
+        "p50ComputeUs": 152.25,
+        "p95ComputeUs": 195.125,
+        "maxComputeUs": 263.625
+      },
+      {
+        "maxDiscontinuity": 0.4827881269156933,
+        "excessArtifactRatio": 0.9992148902038681,
+        "meanSpectralFlux": 42.99172877180395,
+        "maxSpectralFlux": 165.66116124630423,
+        "meanComputeUs": 157.99713066666666,
+        "p50ComputeUs": 155.375,
+        "p95ComputeUs": 198.708,
+        "maxComputeUs": 354.666
+      },
+      {
+        "maxDiscontinuity": 0.48391813784837723,
+        "excessArtifactRatio": 0.998149172714233,
+        "meanSpectralFlux": 42.974982889743394,
+        "maxSpectralFlux": 164.71999086232665,
+        "meanComputeUs": 155.52144399999997,
+        "p50ComputeUs": 153.541,
+        "p95ComputeUs": 197,
+        "maxComputeUs": 284.625
+      },
+      {
+        "maxDiscontinuity": 0.4828915372490883,
+        "excessArtifactRatio": 0.9932051586406951,
+        "meanSpectralFlux": 43.057148494399996,
+        "maxSpectralFlux": 165.82456503212964,
+        "meanComputeUs": 154.14040400000005,
+        "p50ComputeUs": 151.792,
+        "p95ComputeUs": 190.791,
+        "maxComputeUs": 270.458
+      },
+      {
+        "maxDiscontinuity": 0.4827881269156933,
+        "excessArtifactRatio": 0.9992148902038681,
+        "meanSpectralFlux": 42.99172877180395,
+        "maxSpectralFlux": 165.66116124630423,
+        "meanComputeUs": 154.8830226666667,
+        "p50ComputeUs": 153.459,
+        "p95ComputeUs": 194.667,
+        "maxComputeUs": 274.042
+      }
+    ],
+    "smoothedSample": [
+      {
+        "maxDiscontinuity": 0.38803861290216446,
+        "excessArtifactRatio": 0.31316888283802047,
+        "meanSpectralFlux": 21.592894402155924,
+        "maxSpectralFlux": 110.49908223071752,
+        "meanComputeUs": 16.686989333333308,
+        "p50ComputeUs": 14.667,
+        "p95ComputeUs": 19.209,
+        "maxComputeUs": 273.708
+      },
+      {
+        "maxDiscontinuity": 0.3767143515869975,
+        "excessArtifactRatio": 0.24309136349780433,
+        "meanSpectralFlux": 20.85426751745512,
+        "maxSpectralFlux": 107.29906463985533,
+        "meanComputeUs": 16.58922133333332,
+        "p50ComputeUs": 15.542,
+        "p95ComputeUs": 20.375,
+        "maxComputeUs": 70.083
+      },
+      {
+        "maxDiscontinuity": 0.3689066246151924,
+        "excessArtifactRatio": 0.2442771856420852,
+        "meanSpectralFlux": 20.929363916770033,
+        "maxSpectralFlux": 106.91845954941236,
+        "meanComputeUs": 15.01843466666657,
+        "p50ComputeUs": 14.75,
+        "p95ComputeUs": 15.375,
+        "maxComputeUs": 48.583
+      },
+      {
+        "maxDiscontinuity": 0.3882255181670189,
+        "excessArtifactRatio": 0.3161910309972055,
+        "meanSpectralFlux": 21.60515696511772,
+        "maxSpectralFlux": 110.31244471458419,
+        "meanComputeUs": 15.415797333333423,
+        "p50ComputeUs": 15.375,
+        "p95ComputeUs": 15.542,
+        "maxComputeUs": 50.042
+      },
+      {
+        "maxDiscontinuity": 0.37416872382164,
+        "excessArtifactRatio": 0.2428176457273321,
+        "meanSpectralFlux": 20.852444566148176,
+        "maxSpectralFlux": 109.77552824627186,
+        "meanComputeUs": 15.05900799999993,
+        "p50ComputeUs": 14.708,
+        "p95ComputeUs": 15.583,
+        "maxComputeUs": 55.709
+      },
+      {
+        "maxDiscontinuity": 0.35544586181640625,
+        "excessArtifactRatio": 0.2443433057260988,
+        "meanSpectralFlux": 20.914427720373084,
+        "maxSpectralFlux": 105.8990544450286,
+        "meanComputeUs": 15.16411333333331,
+        "p50ComputeUs": 14.75,
+        "p95ComputeUs": 15.584,
+        "maxComputeUs": 66.333
+      },
+      {
+        "maxDiscontinuity": 0.3882834389805794,
+        "excessArtifactRatio": 0.3161454400275741,
+        "meanSpectralFlux": 21.590163004844726,
+        "maxSpectralFlux": 109.99578349428374,
+        "meanComputeUs": 15.417232000000018,
+        "p50ComputeUs": 15.292,
+        "p95ComputeUs": 15.625,
+        "maxComputeUs": 51.958
+      },
+      {
+        "maxDiscontinuity": 0.3814175873994827,
+        "excessArtifactRatio": 0.24343333907129072,
+        "meanSpectralFlux": 20.871800432684807,
+        "maxSpectralFlux": 109.59453713983328,
+        "meanComputeUs": 15.053684000000027,
+        "p50ComputeUs": 14.709,
+        "p95ComputeUs": 15.584,
+        "maxComputeUs": 53.625
+      },
+      {
+        "maxDiscontinuity": 0.3600795096717775,
+        "excessArtifactRatio": 0.2445735261065759,
+        "meanSpectralFlux": 20.880661988882647,
+        "maxSpectralFlux": 106.87596572502738,
+        "meanComputeUs": 15.395051999999994,
+        "p50ComputeUs": 15.292,
+        "p95ComputeUs": 15.584,
+        "maxComputeUs": 59.125
+      },
+      {
+        "maxDiscontinuity": 0.3884035497903824,
+        "excessArtifactRatio": 0.3163725603734047,
+        "meanSpectralFlux": 21.567813792309263,
+        "maxSpectralFlux": 109.1996491219144,
+        "meanComputeUs": 15.49234266666679,
+        "p50ComputeUs": 15.291,
+        "p95ComputeUs": 15.542,
+        "maxComputeUs": 73.75
+      },
+      {
+        "maxDiscontinuity": 0.3858009874820709,
+        "excessArtifactRatio": 0.24290795244985564,
+        "meanSpectralFlux": 20.90992985146567,
+        "maxSpectralFlux": 109.63379957806465,
+        "meanComputeUs": 15.558818666666678,
+        "p50ComputeUs": 15.5,
+        "p95ComputeUs": 15.792,
+        "maxComputeUs": 23.208
+      },
+      {
+        "maxDiscontinuity": 0.36257759761065245,
+        "excessArtifactRatio": 0.24424712841136814,
+        "meanSpectralFlux": 20.87167419154804,
+        "maxSpectralFlux": 107.77457047494059,
+        "meanComputeUs": 15.549537333333344,
+        "p50ComputeUs": 15.416,
+        "p95ComputeUs": 15.666,
+        "maxComputeUs": 53.25
+      },
+      {
+        "maxDiscontinuity": 0.3884459584951401,
+        "excessArtifactRatio": 0.3158052254943504,
+        "meanSpectralFlux": 21.551988896856084,
+        "maxSpectralFlux": 109.67385142539113,
+        "meanComputeUs": 14.598441333333328,
+        "p50ComputeUs": 14.541,
+        "p95ComputeUs": 14.791,
+        "maxComputeUs": 18.416
+      },
+      {
+        "maxDiscontinuity": 0.3873901441693306,
+        "excessArtifactRatio": 0.2423010337233688,
+        "meanSpectralFlux": 20.930914567796634,
+        "maxSpectralFlux": 109.1021550249924,
+        "meanComputeUs": 14.760268000000103,
+        "p50ComputeUs": 14.541,
+        "p95ComputeUs": 14.75,
+        "maxComputeUs": 49.041
+      },
+      {
+        "maxDiscontinuity": 0.3678997363895178,
+        "excessArtifactRatio": 0.24421622884509225,
+        "meanSpectralFlux": 20.863012771718864,
+        "maxSpectralFlux": 108.39296637718881,
+        "meanComputeUs": 14.700449333333442,
+        "p50ComputeUs": 14.541,
+        "p95ComputeUs": 14.708,
+        "maxComputeUs": 48.709
+      },
+      {
+        "maxDiscontinuity": 0.38850632309913635,
+        "excessArtifactRatio": 0.3155047100363271,
+        "meanSpectralFlux": 21.550030853814572,
+        "maxSpectralFlux": 110.59985035215371,
+        "meanComputeUs": 14.655380000000111,
+        "p50ComputeUs": 14.541,
+        "p95ComputeUs": 14.708,
+        "maxComputeUs": 29.667
+      },
+      {
+        "maxDiscontinuity": 0.38119909167289734,
+        "excessArtifactRatio": 0.24252023547732682,
+        "meanSpectralFlux": 20.93927347892048,
+        "maxSpectralFlux": 108.56482070800305,
+        "meanComputeUs": 14.634206666666733,
+        "p50ComputeUs": 14.5,
+        "p95ComputeUs": 14.667,
+        "maxComputeUs": 23.583
+      },
+      {
+        "maxDiscontinuity": 0.371953081805259,
+        "excessArtifactRatio": 0.24424429016856697,
+        "meanSpectralFlux": 20.85345685418656,
+        "maxSpectralFlux": 109.03126706818122,
+        "meanComputeUs": 14.59610800000011,
+        "p50ComputeUs": 14.541,
+        "p95ComputeUs": 14.667,
+        "maxComputeUs": 19.291
+      },
+      {
+        "maxDiscontinuity": 0.3885234668850899,
+        "excessArtifactRatio": 0.31570462037267544,
+        "meanSpectralFlux": 21.545597534058626,
+        "maxSpectralFlux": 110.84599720875656,
+        "meanComputeUs": 14.760103999999982,
+        "p50ComputeUs": 14.625,
+        "p95ComputeUs": 15.292,
+        "maxComputeUs": 23.417
+      },
+      {
+        "maxDiscontinuity": 0.3862937092781067,
+        "excessArtifactRatio": 0.2457147151761744,
+        "meanSpectralFlux": 20.94076280844423,
+        "maxSpectralFlux": 110.18512343421783,
+        "meanComputeUs": 15.183274666666689,
+        "p50ComputeUs": 15.125,
+        "p95ComputeUs": 15.375,
+        "maxComputeUs": 44.5
+      }
+    ]
+  }
+}

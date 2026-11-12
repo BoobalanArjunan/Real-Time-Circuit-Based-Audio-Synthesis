@@ -1,0 +1,473 @@
+{
+  "experiment": "JAES Phase 3: Memory Footprint and Storage Scalability",
+  "timestamp": "2026-11-12T11:32:35.014Z",
+  "configuration": {
+    "presetsCount": 61,
+    "sampleRate": 48000,
+    "noteDurationSec": 2,
+    "bytesPerSampleFile": 384000
+  },
+  "storageComparison": {
+    "mnaNetlistTotalBytes": 81130,
+    "mnaNetlistAvgBytes": 1330,
+    "sampleBankMinBytes": 117120000,
+    "sampleBankStdBytes": 562176000,
+    "sampleBankFullBytes": 2061312000
+  },
+  "runtimeStateScaling": [
+    {
+      "voices": 1,
+      "mnaVoiceRamKb": "82.73",
+      "sampleVoiceRamKb": "32.00"
+    },
+    {
+      "voices": 4,
+      "mnaVoiceRamKb": "330.93",
+      "sampleVoiceRamKb": "128.00"
+    },
+    {
+      "voices": 8,
+      "mnaVoiceRamKb": "661.86",
+      "sampleVoiceRamKb": "256.00"
+    },
+    {
+      "voices": 16,
+      "mnaVoiceRamKb": "1323.72",
+      "sampleVoiceRamKb": "512.00"
+    },
+    {
+      "voices": 32,
+      "mnaVoiceRamKb": "2647.44",
+      "sampleVoiceRamKb": "1024.00"
+    }
+  ],
+  "presetDetails": [
+    {
+      "id": "rc",
+      "name": "RC low-pass",
+      "componentsCount": 3,
+      "binaryBytes": 1330,
+      "jsonBytes": 168
+    },
+    {
+      "id": "hp",
+      "name": "RC high-pass",
+      "componentsCount": 3,
+      "binaryBytes": 1330,
+      "jsonBytes": 181
+    },
+    {
+      "id": "rlc",
+      "name": "RLC low-pass",
+      "componentsCount": 4,
+      "binaryBytes": 1330,
+      "jsonBytes": 230
+    },
+    {
+      "id": "tank",
+      "name": "LC tank",
+      "componentsCount": 4,
+      "binaryBytes": 1330,
+      "jsonBytes": 215
+    },
+    {
+      "id": "bp",
+      "name": "Tank filter",
+      "componentsCount": 4,
+      "binaryBytes": 1330,
+      "jsonBytes": 224
+    },
+    {
+      "id": "sbp",
+      "name": "Series LC",
+      "componentsCount": 4,
+      "binaryBytes": 1330,
+      "jsonBytes": 249
+    },
+    {
+      "id": "thump",
+      "name": "Thump",
+      "componentsCount": 4,
+      "binaryBytes": 1330,
+      "jsonBytes": 259
+    },
+    {
+      "id": "rc2",
+      "name": "Two RC stages",
+      "componentsCount": 5,
+      "binaryBytes": 1330,
+      "jsonBytes": 176
+    },
+    {
+      "id": "notch",
+      "name": "LC trap",
+      "componentsCount": 5,
+      "binaryBytes": 1330,
+      "jsonBytes": 254
+    },
+    {
+      "id": "pi",
+      "name": "Pi filter",
+      "componentsCount": 6,
+      "binaryBytes": 1330,
+      "jsonBytes": 192
+    },
+    {
+      "id": "vdp",
+      "name": "Van der Pol",
+      "componentsCount": 4,
+      "binaryBytes": 1330,
+      "jsonBytes": 221
+    },
+    {
+      "id": "rect",
+      "name": "Half-wave rectifier",
+      "componentsCount": 4,
+      "binaryBytes": 1330,
+      "jsonBytes": 237
+    },
+    {
+      "id": "relax",
+      "name": "Van der Pol, pushed",
+      "componentsCount": 4,
+      "binaryBytes": 1330,
+      "jsonBytes": 277
+    },
+    {
+      "id": "clip",
+      "name": "Diode clipper",
+      "componentsCount": 5,
+      "binaryBytes": 1330,
+      "jsonBytes": 213
+    },
+    {
+      "id": "neon",
+      "name": "Neon lamp",
+      "componentsCount": 5,
+      "binaryBytes": 1330,
+      "jsonBytes": 265
+    },
+    {
+      "id": "chua",
+      "name": "Chua's circuit",
+      "componentsCount": 5,
+      "binaryBytes": 1330,
+      "jsonBytes": 444
+    },
+    {
+      "id": "fuzz",
+      "name": "Fuzz",
+      "componentsCount": 5,
+      "binaryBytes": 1330,
+      "jsonBytes": 231
+    },
+    {
+      "id": "oneway",
+      "name": "One-way tank",
+      "componentsCount": 5,
+      "binaryBytes": 1330,
+      "jsonBytes": 220
+    },
+    {
+      "id": "chua1",
+      "name": "Chua, one scroll",
+      "componentsCount": 5,
+      "binaryBytes": 1330,
+      "jsonBytes": 231
+    },
+    {
+      "id": "bridge",
+      "name": "Diode bridge",
+      "componentsCount": 6,
+      "binaryBytes": 1330,
+      "jsonBytes": 248
+    },
+    {
+      "id": "formant",
+      "name": "Lamp and tank",
+      "componentsCount": 9,
+      "binaryBytes": 1330,
+      "jsonBytes": 237
+    },
+    {
+      "id": "flip",
+      "name": "Two lamps",
+      "componentsCount": 10,
+      "binaryBytes": 1330,
+      "jsonBytes": 285
+    },
+    {
+      "id": "pair",
+      "name": "Coupled tanks",
+      "componentsCount": 8,
+      "binaryBytes": 1330,
+      "jsonBytes": 230
+    },
+    {
+      "id": "twint",
+      "name": "Twin-T notch",
+      "componentsCount": 8,
+      "binaryBytes": 1330,
+      "jsonBytes": 175
+    },
+    {
+      "id": "vdppair",
+      "name": "Two van der Pols",
+      "componentsCount": 9,
+      "binaryBytes": 1330,
+      "jsonBytes": 283
+    },
+    {
+      "id": "ladder",
+      "name": "LC ladder",
+      "componentsCount": 10,
+      "binaryBytes": 1330,
+      "jsonBytes": 258
+    },
+    {
+      "id": "chua2",
+      "name": "Two Chua circuits",
+      "componentsCount": 11,
+      "binaryBytes": 1330,
+      "jsonBytes": 229
+    },
+    {
+      "id": "chualine",
+      "name": "Chaos down a line",
+      "componentsCount": 12,
+      "binaryBytes": 1330,
+      "jsonBytes": 262
+    },
+    {
+      "id": "chord",
+      "name": "Three tanks, a chord",
+      "componentsCount": 13,
+      "binaryBytes": 1330,
+      "jsonBytes": 275
+    },
+    {
+      "id": "line",
+      "name": "LC line",
+      "componentsCount": 15,
+      "binaryBytes": 1330,
+      "jsonBytes": 252
+    },
+    {
+      "id": "bow",
+      "name": "Bowed line",
+      "componentsCount": 15,
+      "binaryBytes": 1330,
+      "jsonBytes": 260
+    },
+    {
+      "id": "bell",
+      "name": "Four tanks, a bell",
+      "componentsCount": 17,
+      "binaryBytes": 1330,
+      "jsonBytes": 256
+    },
+    {
+      "id": "cradle",
+      "name": "Seven tanks",
+      "componentsCount": 28,
+      "binaryBytes": 1330,
+      "jsonBytes": 259
+    },
+    {
+      "id": "choir",
+      "name": "Neon choir",
+      "componentsCount": 30,
+      "binaryBytes": 1330,
+      "jsonBytes": 357
+    },
+    {
+      "id": "vdpneon",
+      "name": "Pol and lamp",
+      "componentsCount": 9,
+      "binaryBytes": 1330,
+      "jsonBytes": 234
+    },
+    {
+      "id": "kickbell",
+      "name": "Thump and bell",
+      "componentsCount": 21,
+      "binaryBytes": 1330,
+      "jsonBytes": 246
+    },
+    {
+      "id": "chuachoir",
+      "name": "Chaos and choir",
+      "componentsCount": 35,
+      "binaryBytes": 1330,
+      "jsonBytes": 236
+    },
+    {
+      "id": "ring",
+      "name": "Ring line",
+      "componentsCount": 37,
+      "binaryBytes": 1330,
+      "jsonBytes": 296
+    },
+    {
+      "id": "long",
+      "name": "Long line",
+      "componentsCount": 55,
+      "binaryBytes": 1330,
+      "jsonBytes": 290
+    },
+    {
+      "id": "step",
+      "name": "Stepped line",
+      "componentsCount": 55,
+      "binaryBytes": 1330,
+      "jsonBytes": 308
+    },
+    {
+      "id": "gong",
+      "name": "Bowed mesh",
+      "componentsCount": 72,
+      "binaryBytes": 1330,
+      "jsonBytes": 297
+    },
+    {
+      "id": "mesh",
+      "name": "LC mesh",
+      "componentsCount": 73,
+      "binaryBytes": 1330,
+      "jsonBytes": 356
+    },
+    {
+      "id": "mesh2",
+      "name": "LC mesh, struck inside",
+      "componentsCount": 73,
+      "binaryBytes": 1330,
+      "jsonBytes": 316
+    },
+    {
+      "id": "dmesh",
+      "name": "LC mesh with diodes",
+      "componentsCount": 73,
+      "binaryBytes": 1330,
+      "jsonBytes": 265
+    },
+    {
+      "id": "snake",
+      "name": "Snake",
+      "componentsCount": 97,
+      "binaryBytes": 1330,
+      "jsonBytes": 318
+    },
+    {
+      "id": "sqmesh",
+      "name": "Square skin",
+      "componentsCount": 133,
+      "binaryBytes": 1330,
+      "jsonBytes": 388
+    },
+    {
+      "id": "ikick",
+      "name": "Iron kick",
+      "componentsCount": 4,
+      "binaryBytes": 1330,
+      "jsonBytes": 444
+    },
+    {
+      "id": "boom",
+      "name": "Sub boom",
+      "componentsCount": 4,
+      "binaryBytes": 1330,
+      "jsonBytes": 328
+    },
+    {
+      "id": "zap",
+      "name": "Zap",
+      "componentsCount": 4,
+      "binaryBytes": 1330,
+      "jsonBytes": 381
+    },
+    {
+      "id": "itom",
+      "name": "Iron tom",
+      "componentsCount": 4,
+      "binaryBytes": 1330,
+      "jsonBytes": 304
+    },
+    {
+      "id": "hkick",
+      "name": "Hard kick",
+      "componentsCount": 7,
+      "binaryBytes": 1330,
+      "jsonBytes": 488
+    },
+    {
+      "id": "rim",
+      "name": "Rim",
+      "componentsCount": 7,
+      "binaryBytes": 1330,
+      "jsonBytes": 315
+    },
+    {
+      "id": "cowbell",
+      "name": "Cowbell",
+      "componentsCount": 8,
+      "binaryBytes": 1330,
+      "jsonBytes": 315
+    },
+    {
+      "id": "snare",
+      "name": "Snare",
+      "componentsCount": 10,
+      "binaryBytes": 1330,
+      "jsonBytes": 462
+    },
+    {
+      "id": "hat",
+      "name": "Hat",
+      "componentsCount": 20,
+      "binaryBytes": 1330,
+      "jsonBytes": 391
+    },
+    {
+      "id": "trill",
+      "name": "Electronic ringer",
+      "componentsCount": 4,
+      "binaryBytes": 1330,
+      "jsonBytes": 653
+    },
+    {
+      "id": "siren",
+      "name": "Siren",
+      "componentsCount": 4,
+      "binaryBytes": 1330,
+      "jsonBytes": 470
+    },
+    {
+      "id": "beep",
+      "name": "Appliance beep",
+      "componentsCount": 5,
+      "binaryBytes": 1330,
+      "jsonBytes": 547
+    },
+    {
+      "id": "dialtone",
+      "name": "Dial tone",
+      "componentsCount": 8,
+      "binaryBytes": 1330,
+      "jsonBytes": 430
+    },
+    {
+      "id": "busy",
+      "name": "Busy signal",
+      "componentsCount": 8,
+      "binaryBytes": 1330,
+      "jsonBytes": 517
+    },
+    {
+      "id": "bellphone",
+      "name": "Bell telephone",
+      "componentsCount": 13,
+      "binaryBytes": 1330,
+      "jsonBytes": 620
+    }
+  ]
+}
