@@ -98,3 +98,4 @@ html_content = """<!DOCTYPE html>
 with open('jaes_benchmark_env/preview_manuscript.html', 'w') as f:
     f.write(html_content)
 print('Successfully generated clean preview_manuscript.html!')
+
