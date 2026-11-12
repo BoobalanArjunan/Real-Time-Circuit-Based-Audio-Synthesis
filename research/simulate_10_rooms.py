@@ -43,6 +43,30 @@ def compute_eyring(dimensions, absorption_coeffs):
     t60_eyring = 0.1611 * V / (-S * np.log(1.0 - mean_alpha))
     return t60_eyring, mean_alpha
 
+# 10 Diverse Test Rooms spanning small, medium, and large volumes and varying absorption
+ROOMS = [
+    {"id": "ROOM_01_SMALL_DRY", "dim": [3.2, 4.0, 2.6], "alpha": 0.55, "target_rt60": 0.25,
+     "src": [1.0, 1.2, 1.4], "mic": [2.0, 2.5, 1.4]},
+    {"id": "ROOM_02_STUDIO_MED", "dim": [5.0, 4.2, 2.8], "alpha": 0.40, "target_rt60": 0.38,
+     "src": [1.5, 1.5, 1.2], "mic": [3.5, 2.8, 1.2]},
+    {"id": "ROOM_03_OFFICE", "dim": [6.0, 5.0, 3.0], "alpha": 0.30, "target_rt60": 0.55,
+     "src": [1.8, 1.8, 1.3], "mic": [4.2, 3.5, 1.3]},
+    {"id": "ROOM_04_CLASSROOM", "dim": [7.5, 6.0, 3.2], "alpha": 0.25, "target_rt60": 0.72,
+     "src": [2.0, 2.0, 1.5], "mic": [5.5, 4.5, 1.5]},
+    {"id": "ROOM_05_MED_HALL", "dim": [9.0, 7.0, 3.8], "alpha": 0.22, "target_rt60": 0.95,
+     "src": [2.5, 2.0, 1.6], "mic": [6.5, 5.0, 1.6]},
+    {"id": "ROOM_06_RECITAL", "dim": [11.0, 8.5, 4.5], "alpha": 0.20, "target_rt60": 1.20,
+     "src": [3.0, 2.5, 1.6], "mic": [8.0, 6.0, 1.6]},
+    {"id": "ROOM_07_CHURCH_SMALL", "dim": [14.0, 10.0, 6.0], "alpha": 0.18, "target_rt60": 1.55,
+     "src": [3.5, 3.0, 1.8], "mic": [10.5, 7.0, 1.8]},
+    {"id": "ROOM_08_AUDITORIUM", "dim": [16.0, 12.0, 7.0], "alpha": 0.16, "target_rt60": 1.85,
+     "src": [4.0, 3.5, 1.8], "mic": [12.0, 8.5, 1.8]},
+    {"id": "ROOM_09_CAVERN_DRY", "dim": [18.0, 14.0, 8.0], "alpha": 0.35, "target_rt60": 1.40,
+     "src": [4.5, 4.0, 2.0], "mic": [13.5, 10.0, 2.0]},
+    {"id": "ROOM_10_CATHEDRAL", "dim": [20.0, 15.0, 9.0], "alpha": 0.14, "target_rt60": 2.30,
+     "src": [5.0, 4.0, 2.0], "mic": [15.0, 11.0, 2.0]},
+]
+
 def generate_shoebox_rir(dimensions, source_pos, mic_pos, absorption_coeffs, max_order=15, fs=16000, max_duration=2.5):
     """
     Image Source Method for a 3D shoebox room.
@@ -169,29 +193,7 @@ def main():
     os.makedirs("research/figures", exist_ok=True)
     os.makedirs("research/rirs", exist_ok=True)
     
-    # 10 Diverse Test Rooms spanning small, medium, and large volumes and varying absorption
-    rooms_config = [
-        {"id": "ROOM_01_SMALL_DRY", "dim": [3.2, 4.0, 2.6], "alpha": 0.55, "target_rt60": 0.25,
-         "src": [1.0, 1.2, 1.4], "mic": [2.0, 2.5, 1.4]},
-        {"id": "ROOM_02_STUDIO_MED", "dim": [5.0, 4.2, 2.8], "alpha": 0.40, "target_rt60": 0.38,
-         "src": [1.5, 1.5, 1.2], "mic": [3.5, 2.8, 1.2]},
-        {"id": "ROOM_03_OFFICE", "dim": [6.0, 5.0, 3.0], "alpha": 0.30, "target_rt60": 0.55,
-         "src": [1.8, 1.8, 1.3], "mic": [4.2, 3.5, 1.3]},
-        {"id": "ROOM_04_CLASSROOM", "dim": [7.5, 6.0, 3.2], "alpha": 0.25, "target_rt60": 0.72,
-         "src": [2.0, 2.0, 1.5], "mic": [5.5, 4.5, 1.5]},
-        {"id": "ROOM_05_MED_HALL", "dim": [9.0, 7.0, 3.8], "alpha": 0.22, "target_rt60": 0.95,
-         "src": [2.5, 2.0, 1.6], "mic": [6.5, 5.0, 1.6]},
-        {"id": "ROOM_06_RECITAL", "dim": [11.0, 8.5, 4.5], "alpha": 0.20, "target_rt60": 1.20,
-         "src": [3.0, 2.5, 1.6], "mic": [8.0, 6.0, 1.6]},
-        {"id": "ROOM_07_CHURCH_SMALL", "dim": [14.0, 10.0, 6.0], "alpha": 0.18, "target_rt60": 1.55,
-         "src": [3.5, 3.0, 1.8], "mic": [10.5, 7.0, 1.8]},
-        {"id": "ROOM_08_AUDITORIUM", "dim": [16.0, 12.0, 7.0], "alpha": 0.16, "target_rt60": 1.85,
-         "src": [4.0, 3.5, 1.8], "mic": [12.0, 8.5, 1.8]},
-        {"id": "ROOM_09_CAVERN_DRY", "dim": [18.0, 14.0, 8.0], "alpha": 0.35, "target_rt60": 1.40,
-         "src": [4.5, 4.0, 2.0], "mic": [13.5, 10.0, 2.0]},
-        {"id": "ROOM_10_CATHEDRAL", "dim": [20.0, 15.0, 9.0], "alpha": 0.14, "target_rt60": 2.30,
-         "src": [5.0, 4.0, 2.0], "mic": [15.0, 11.0, 2.0]},
-    ]
+    rooms_config = ROOMS
     
     fs = 16000 # 16 kHz as specified in master plan
     csv_rows = ["room_id,target_rt60,measured_t20_rt60,measured_t30_rt60,sabine_rt60,eyring_rt60,drr_db,fit_r2,usable_decay_db,rir_length_s,verification_status,reason"]

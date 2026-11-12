@@ -1,0 +1,4 @@
+source_type,event_count,ground_truth_t30,estimated_t60,relative_error_pct,fit_r2,observability_status,notes
+isolated_impulses,3,0.729,0.731,0.3%,1.000,OBSERVABLE,Broadband Dirac pulses
+percussive_gated,5,0.729,0.243,66.7%,0.894,OBSERVABLE,Gated 100ms transient bursts
+sustained_tone_neg_control,0,0.729,N/A,N/A,0.000,UNOBSERVABLE (No discrete offset events),Continuous 440 Hz tone (no offset/decay)

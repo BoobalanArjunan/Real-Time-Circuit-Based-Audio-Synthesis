@@ -63,29 +63,29 @@ def estimate_decay_from_offset(audio, event_offsets, fs, search_win_s=1.0):
     r2_scores = []
     
     for off_time in event_offsets:
-        start_idx = int((off_time + 0.02) * fs) # 20 ms after offset to bypass direct decay
+        start_idx = int(off_time * fs)
         win_samples = int(search_win_s * fs)
         if start_idx + win_samples > len(audio):
             continue
             
         segment = audio[start_idx:start_idx+win_samples]
-        # Envelope via Hilbert transform or squared smoothed energy
-        analytic = scipy.signal.hilbert(segment)
-        env = np.abs(analytic)
-        env_db = 20 * np.log10(np.maximum(1e-6, env) / np.max(env))
+        # Schroeder backward energy decay integration
+        energy = segment ** 2
+        edc = np.flip(np.cumsum(np.flip(energy)))
+        edc_db = 10 * np.log10(np.maximum(1e-10, edc) / (np.max(edc) + 1e-12))
         
         # Fit linear slope between -5 dB and -25 dB
         time_seg = np.arange(len(segment)) / fs
-        indices = np.where((env_db <= -5.0) & (env_db >= -25.0))[0]
+        indices = np.where((edc_db <= -5.0) & (edc_db >= -25.0))[0]
         if len(indices) > 30:
-            p = np.polyfit(time_seg[indices], env_db[indices], 1)
+            p = np.polyfit(time_seg[indices], edc_db[indices], 1)
             slope = p[0]
             if slope < -5.0: # Valid downward decay
                 t60 = -60.0 / slope
                 # R^2
                 pred = np.polyval(p, time_seg[indices])
-                ss_tot = np.sum((env_db[indices] - np.mean(env_db[indices]))**2)
-                ss_res = np.sum((env_db[indices] - pred)**2)
+                ss_tot = np.sum((edc_db[indices] - np.mean(edc_db[indices]))**2)
+                ss_res = np.sum((edc_db[indices] - pred)**2)
                 r2 = 1.0 - (ss_res / (ss_tot + 1e-9))
                 est_t60s.append(t60)
                 r2_scores.append(r2)
@@ -172,3 +172,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
