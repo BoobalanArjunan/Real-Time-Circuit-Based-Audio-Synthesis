@@ -4,7 +4,8 @@
 
 **Author:** Boobalan Arjunan  
 **Affiliation:** ComposerMind Labs, Chennai, India  
-**Research manuscript:** Submitted to *Journal of the Audio Engineering Society* (JAES), November 2026 — **under review / publication status not established**  
+**Research manuscript:** Submitted to *Journal of the Audio Engineering Society* (JAES), November 12, 2026 — **Under Peer Review**  
+**Editorial Manager Tracking ID:** `JAES-S-26-00299` | **Confirmation ID:** `EMID:4c1c93d9e0c91bba`  
 **Repository:** [https://github.com/BoobalanArjunan/Real-Time-Circuit-Based-Audio-Synthesis](https://github.com/BoobalanArjunan/Real-Time-Circuit-Based-Audio-Synthesis)  
 **Contact:** boobalan_arjunan@composermind.com
 
